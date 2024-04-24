@@ -10,6 +10,7 @@ class ChatBubble extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    //lightmode vs darkmode for correct bubble colors//
     return Container(
       decoration: BoxDecoration(
         color: isCurrentUser ? Colors.green : Colors.grey.shade500,
