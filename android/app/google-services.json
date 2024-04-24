@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "157761554244",
+    "project_id": "voxify-bb2fb",
+    "storage_bucket": "voxify-bb2fb.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:157761554244:android:79623005ea7c01933e3911",
+        "android_client_info": {
+          "package_name": "com.example.verbalize"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBxRpy2JzT9MdeqBoYT0eV4E8QKcdx-MLM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
