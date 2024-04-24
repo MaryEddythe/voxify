@@ -32,27 +32,29 @@ class _ChatPageState extends State<ChatPage> {
   //textfield focus node//
   FocusNode myFocusNode =  FocusNode();
 
-  @override
+   @override
   void initState() {
     super.initState();
 
-    //add listener to focus on node//
+    // Add listener to focus node
     myFocusNode.addListener(() {
       if (myFocusNode.hasFocus) {
-        //cause a delay so keyboard has time to show up//
-        //space will be calculated then scroll down//
-
-        Future.delayed(const Duration(milliseconds: 500), 
-        () => scrollDown(),
+        // Cause a delay so the keyboard has time to show up
+        // Space will be calculated then scroll down
+        Future.delayed(
+          const Duration(milliseconds: 500), 
+          () => scrollDown(),
         );
       }
     });
 
-    //wait a bit for listview to be built, then scroll to bottom//
-    Future.delayed(const Duration(milliseconds: 500), 
-    () => scrollDown(),
+    // Wait a bit for the listview to be built, then scroll to bottom
+    Future.delayed(
+      const Duration(milliseconds: 500), 
+      () => scrollDown(),
     );
   }
+
 
   //send message//
   void sendMessage() async {
@@ -158,7 +160,7 @@ class _ChatPageState extends State<ChatPage> {
   //build message input//
   Widget _buildUserInput() {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 50.0),
+      padding: const EdgeInsets.only(top: 10, bottom: 50.0),
       child: Row(
         children: [
           //textfield should take up most of space//
