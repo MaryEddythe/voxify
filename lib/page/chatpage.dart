@@ -49,7 +49,7 @@ class _ChatPageState extends State<ChatPage> {
     });
 
     //wait a bit for listview to be built, then scroll to bottom//
-    Future.delayed(const Duration(microseconds: 500), 
+    Future.delayed(const Duration(milliseconds: 500), 
     () => scrollDown(),
     );
   }
