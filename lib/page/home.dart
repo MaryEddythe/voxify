@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:verbalize/backend/drawer.dart';
 import 'package:verbalize/backend/usertile.dart';
 import 'package:verbalize/page/chatpage.dart';
@@ -7,9 +8,9 @@ import 'package:verbalize/services/chat/chat.dart';
 
 
 class HomePage extends StatelessWidget {
-   HomePage({super.key});
+   HomePage({Key? key});
 
-  //display users auth serivces//
+  // Display users auth services
   final ChatService _chatService = ChatService();
   final AuthService _authService = AuthService();
 
@@ -17,33 +18,41 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
-      appBar: AppBar(title: const Text("Home"),
-      foregroundColor: Colors.grey,
-     backgroundColor: Colors.transparent, 
-     elevation: 0,
+      appBar: AppBar(
+        title: Text(
+          "Chats",
+          style: GoogleFonts.poppins(
+            textStyle: const TextStyle(
+              color: Colors.black,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+        ),
+        centerTitle: true, // Center the title horizontally
+        backgroundColor: Colors.transparent, 
+        elevation: 0,
       ),
       drawer: const MyDrawer(),
       body: _buildUserList(),
     );
   }
 
-  //build list of users//
+  // Build list of users
   Widget _buildUserList(){
     return StreamBuilder(
       stream: _chatService.getUsersStream(),
       builder: (context, snapshot) {
-        //error//
-
+        // Error handling
         if (snapshot.hasError){
           return const Text("Error");
         }
 
-        //loading//
+        // Loading indicator
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Text("Loading...");
         }
 
-        //return list view//
+        // Return list view
         return ListView(
           children: snapshot.data!.map<Widget>((userData) => _buildUserListItem(userData, context))
           .toList(),
@@ -52,26 +61,26 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  //build indiv list user tile//
+  // Build individual list user tile
   Widget _buildUserListItem(Map<String, dynamic> userData, BuildContext context)
   {
-    //display all users exceot current//
+    // Display all users except current user
     if (userData["email"] != _authService.getCurrentUser()!.email) {
       return UserTile(
-      text: userData["email"],
-      onTap: () {
-        //tapped user//
-        Navigator.push(
-          context, 
-          MaterialPageRoute(
-            builder: (context) => ChatPage(
-              receiverEmail: userData["email"],
-              receiverID: userData["uid"],
+        text: userData["email"],
+        onTap: () {
+          // Tapped user
+          Navigator.push(
+            context, 
+            MaterialPageRoute(
+              builder: (context) => ChatPage(
+                receiverEmail: userData["email"],
+                receiverID: userData["uid"],
+              ),
             ),
-           ),
-        );
-      },
-    );
+          );
+        },
+      );
     }
     else {
       return Container();

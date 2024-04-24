@@ -33,28 +33,22 @@ class _ChatPageState extends State<ChatPage> {
   FocusNode myFocusNode =  FocusNode();
 
    @override
-  void initState() {
-    super.initState();
+void initState() {
+  super.initState();
 
-    // Add listener to focus node
-    myFocusNode.addListener(() {
-      if (myFocusNode.hasFocus) {
-        // Cause a delay so the keyboard has time to show up
-        // Space will be calculated then scroll down
-        Future.delayed(
-          const Duration(milliseconds: 500), 
-          () => scrollDown(),
-        );
-      }
-    });
-
-    // Wait a bit for the listview to be built, then scroll to bottom
-    Future.delayed(
-      const Duration(milliseconds: 500), 
-      () => scrollDown(),
-    );
-  }
-
+  // Add listener to focus node
+  myFocusNode.addListener(() {
+    if (myFocusNode.hasFocus) {
+      // Cause a delay so the keyboard has time to show up
+      // Space will be calculated then scroll down
+      Future.delayed(
+        const Duration(milliseconds: 500), 
+        () => scrollDown(),
+      );
+    }
+  });
+  // Wait a bit for the listview to be built, then scroll to bottom
+}
 
   //send message//
   void sendMessage() async {
