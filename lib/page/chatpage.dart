@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:verbalize/backend/chat_bubble.dart';
 import 'package:verbalize/backend/textfield.dart';
 import 'package:verbalize/services/auth/authservice.dart';
@@ -94,38 +95,59 @@ class _ChatPageState extends State<ChatPage> {
   }
 
   Widget _buildMessageList() {
-    String senderID = _authService.getCurrentUser()!.uid;
-    return StreamBuilder(
-      stream: _chatService.getMessages(widget.receiverID, senderID),
-      builder: (context, snapshot) {
-        if (snapshot.hasError) {
-          return const Text("Error");
-        }
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Text("Loading...");
-        }
-        return ListView(
-          controller: _scrollController,
-          children: snapshot.data!.docs.map((doc) => _buildMessageItem(doc)).toList(),
-        );
+  String senderID = _authService.getCurrentUser()!.uid;
+  return StreamBuilder(
+    stream: _chatService.getMessages(widget.receiverID, senderID),
+    builder: (context, snapshot) {
+      if (snapshot.hasError) {
+        return Text("Error");
       }
-    );
-  }
+      if (snapshot.connectionState == ConnectionState.waiting) {
+        return Text("Loading...");
+      }
+      return ListView.builder(
+        controller: _scrollController,
+        itemCount: snapshot.data!.docs.length,
+        itemBuilder: (context, index) {
+          return _buildMessageItem(snapshot.data!.docs[index], index, snapshot.data!.docs.length);
+        },
+      );
+    },
+  );
+}
 
-  Widget _buildMessageItem(DocumentSnapshot doc) {
-    Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
-    bool isCurrentUser = data['senderID'] == _authService.getCurrentUser()!.uid;
-    var alignmet = isCurrentUser ? Alignment.centerRight : Alignment.centerLeft;
-    return Container(
-      alignment: alignmet,
-      child: Column(
-        crossAxisAlignment: isCurrentUser ? CrossAxisAlignment.end : CrossAxisAlignment.start,
-        children: [
-          ChatBubble(message: data ["message"], isCurrentUser: isCurrentUser),
-        ],
-      ),
-    );
-  }
+  Widget _buildMessageItem(DocumentSnapshot doc, int index, int totalCount) {
+  Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+  bool isCurrentUser = data['senderID'] == _authService.getCurrentUser()!.uid;
+  var alignmet = isCurrentUser ? Alignment.centerRight : Alignment.centerLeft;
+
+  // Parse the timestamp from the data
+  Timestamp timestamp = data['timestamp'] ?? Timestamp.now();
+  DateTime dateTime = timestamp.toDate();
+
+  // Format the time based on the 12-hour clock format
+  String timeString = DateFormat.jm().format(dateTime); 
+
+  // Check if this is the last message
+  bool isLastMessage = index == totalCount - 1;
+
+  return Column(
+    crossAxisAlignment: isCurrentUser ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+    children: [
+      ChatBubble(message: data ["message"], isCurrentUser: isCurrentUser),
+      if (isLastMessage) // Show time only for the last message
+        Text(
+          timeString,
+          style: const TextStyle(
+            color: Colors.grey,
+            fontSize: 12,
+          ),
+        ),
+    ],
+  );
+}
+
+
 
   Widget _buildUserInput() {
     return Padding(
