@@ -4,64 +4,40 @@ import 'package:verbalize/backend/chat_bubble.dart';
 import 'package:verbalize/backend/textfield.dart';
 import 'package:verbalize/services/auth/authservice.dart';
 import 'package:verbalize/services/chat/chat.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class ChatPage extends StatefulWidget {
   final String receiverEmail;
   final String receiverID;
 
-
-   ChatPage({
-    super.key, 
+  ChatPage({
+    Key? key, 
     required this.receiverEmail,
     required this.receiverID,
-    }
-  );
+  }) : super(key: key);
 
   @override
   State<ChatPage> createState() => _ChatPageState();
 }
 
 class _ChatPageState extends State<ChatPage> {
-  //  text controller//
   final TextEditingController _messageController = TextEditingController();
-
-  //chat and auth servicess//
   final ChatService _chatService = ChatService();
   final AuthService _authService = AuthService();
+  FocusNode myFocusNode = FocusNode();
+  final ScrollController _scrollController = ScrollController();
 
-  //textfield focus node//
-  FocusNode myFocusNode =  FocusNode();
-
-   @override
-void initState() {
-  super.initState();
-
-  // Add listener to focus node
-  myFocusNode.addListener(() {
-    if (myFocusNode.hasFocus) {
-      // Cause a delay so the keyboard has time to show up
-      // Space will be calculated then scroll down
-      Future.delayed(
-        const Duration(milliseconds: 500), 
-        () => scrollDown(),
-      );
-    }
-  });
-  // Wait a bit for the listview to be built, then scroll to bottom
-}
-
-  //send message//
-  void sendMessage() async {
-    //if there is something inside textfield//
-    if(_messageController.text.isNotEmpty){
-      //send the message//
-      await _chatService.sendMessage(widget.receiverID, _messageController.text);
-
-      //clear text controller//
-      _messageController.clear();
-    }
-
-    scrollDown();
+  @override
+  void initState() {
+    super.initState();
+    myFocusNode.addListener(() {
+      if (myFocusNode.hasFocus) {
+        Future.delayed(
+          const Duration(milliseconds: 500), 
+          () => scrollDown(),
+        );
+      }
+    });
   }
 
   @override
@@ -71,13 +47,19 @@ void initState() {
     super.dispose();
   }
 
-  //scroll controller//
-  final ScrollController _scrollController = ScrollController();
+  void sendMessage() async {
+    if (_messageController.text.isNotEmpty) {
+      await _chatService.sendMessage(widget.receiverID, _messageController.text);
+      _messageController.clear();
+    }
+    scrollDown();
+  }
+
   void scrollDown() {
     _scrollController.animateTo(
-    _scrollController.position.maxScrollExtent, 
-    duration: const Duration(seconds: 1), 
-    curve: Curves.fastOutSlowIn,
+      _scrollController.position.maxScrollExtent, 
+      duration: const Duration(seconds: 1), 
+      curve: Curves.fastOutSlowIn,
     );
   }
 
@@ -86,78 +68,70 @@ void initState() {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
       appBar: AppBar(
-      title: Text(widget.receiverEmail),
-      foregroundColor: Colors.grey,
-     backgroundColor: Colors.transparent, 
-     elevation: 0,
+        title: Text(
+          widget.receiverEmail,
+          style: GoogleFonts.poppins(
+            textStyle: TextStyle(
+              color: Color.fromARGB(255, 69, 67, 67),
+              fontWeight: FontWeight.w500,
+              fontSize: 18,
+            ),
+          ),
+        ),
+        foregroundColor: Colors.grey,
+        backgroundColor: Colors.transparent,
+        elevation: 0,
       ),
       body: Column(
         children: [
-          //display all messages//
-          Expanded(child: _buildMessageList(),
+          Expanded(
+            child: _buildMessageList(),
           ),
-
           _buildUserInput(),
         ],
       ),
     );
   }
 
-  //build message list//
-  Widget _buildMessageList(){
+  Widget _buildMessageList() {
     String senderID = _authService.getCurrentUser()!.uid;
     return StreamBuilder(
       stream: _chatService.getMessages(widget.receiverID, senderID),
       builder: (context, snapshot) {
-        //errors//
-        if(snapshot.hasError) {
+        if (snapshot.hasError) {
           return const Text("Error");
         }
-
-        //loading//
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Text("Loading...");
         }
-
-        //retrun listview//
         return ListView(
           controller: _scrollController,
-          children: 
-          snapshot.data!.docs.map((doc) => _buildMessageItem(doc)).toList(),
+          children: snapshot.data!.docs.map((doc) => _buildMessageItem(doc)).toList(),
         );
       }
     );
   }
 
-  //build message item//
-  Widget _buildMessageItem(DocumentSnapshot doc){
+  Widget _buildMessageItem(DocumentSnapshot doc) {
     Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
-
-    //current user//
     bool isCurrentUser = data['senderID'] == _authService.getCurrentUser()!.uid;
-
-    //align to right if sender is current user//
     var alignmet = isCurrentUser ? Alignment.centerRight : Alignment.centerLeft;
-
     return Container(
       alignment: alignmet,
       child: Column(
-        crossAxisAlignment: isCurrentUser ? CrossAxisAlignment.end :CrossAxisAlignment.start,
+        crossAxisAlignment: isCurrentUser ? CrossAxisAlignment.end : CrossAxisAlignment.start,
         children: [
-          ChatBubble(message: data ["message"], 
-          isCurrentUser: isCurrentUser,
-          )
+          ChatBubble(message: data ["message"], isCurrentUser: isCurrentUser),
         ],
-      ));
+      ),
+    );
   }
 
-  //build message input//
   Widget _buildUserInput() {
     return Padding(
       padding: const EdgeInsets.only(top: 10, bottom: 50.0),
       child: Row(
         children: [
-          //textfield should take up most of space//
           Expanded(
             child: MyTextField(
               controller: _messageController,
@@ -166,21 +140,19 @@ void initState() {
               focusNode: myFocusNode,
             ),
           ),
-      
-          //send button//
           Container(
             decoration: const BoxDecoration(
               color: Color(0xff5072A7),
               shape: BoxShape.circle
-              ),
-              margin: const EdgeInsets.only(right: 25.0),
+            ),
+            margin: const EdgeInsets.only(right: 25.0),
             child: IconButton(
               onPressed: sendMessage, 
               icon: const Icon(
                 Icons.arrow_upward, 
                 color: Colors.white,
-                ),
               ),
+            ),
           ),
         ],
       ),

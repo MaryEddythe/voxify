@@ -1,18 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class MyTextField extends StatelessWidget {
   final String hintText;
   final bool obscureText;
   final TextEditingController controller;
-  final FocusNode ? focusNode;
+  final FocusNode? focusNode;
 
   const MyTextField({
-    super.key, 
+    Key? key,
     required this.hintText,
     required this.obscureText,
     required this.controller,
     this.focusNode,
-     });
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -22,6 +23,9 @@ class MyTextField extends StatelessWidget {
         obscureText: obscureText,
         controller: controller,
         focusNode: focusNode,
+        style: GoogleFonts.poppins( // Apply Google Font Poppins to the text field style
+          textStyle: TextStyle(color: Colors.black), // Set text color to black
+        ),
         decoration: InputDecoration(
           enabledBorder: OutlineInputBorder(
             borderSide: BorderSide(color: Theme.of(context).colorScheme.tertiary),
@@ -32,7 +36,9 @@ class MyTextField extends StatelessWidget {
           fillColor: Theme.of(context).colorScheme.secondary,
           filled: true,
           hintText: hintText,
-          hintStyle: TextStyle(color: Theme.of(context).colorScheme.primary),
+          hintStyle: GoogleFonts.poppins( // Apply Google Font Poppins to the hint text style
+            textStyle: TextStyle(color: Theme.of(context).colorScheme.primary),
+          ),
         ),
       ),
     );

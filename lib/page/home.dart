@@ -6,11 +6,9 @@ import 'package:verbalize/page/chatpage.dart';
 import 'package:verbalize/services/auth/authservice.dart';
 import 'package:verbalize/services/chat/chat.dart';
 
-
 class HomePage extends StatelessWidget {
-   HomePage({Key? key});
+  HomePage({Key? key});
 
-  // Display users auth services
   final ChatService _chatService = ChatService();
   final AuthService _authService = AuthService();
 
@@ -28,50 +26,77 @@ class HomePage extends StatelessWidget {
             ),
           ),
         ),
-        centerTitle: true, // Center the title horizontally
-        backgroundColor: Colors.transparent, 
+        centerTitle: true,
+        backgroundColor: Colors.transparent,
         elevation: 0,
       ),
-      drawer: const MyDrawer(),
-      body: _buildUserList(),
+      drawer: MyDrawer(),
+      body: Column(
+        children: [
+          SizedBox(
+            height: 50,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 30.0),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Container(
+                      height: double.infinity,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(5), // Set border radius here
+                        color: Theme.of(context).colorScheme.secondary,
+                      ),
+                      child: TextField(
+                        decoration: InputDecoration(
+                          hintText: "Search",
+                          border: InputBorder.none,
+                          contentPadding: EdgeInsets.only(left: 16), // Adjust only the left padding here
+                        ),
+                      ),
+                    ),
+                  ),
+                  IconButton(
+                    onPressed: () {
+                      // Implement search functionality here
+                    },
+                    icon: Icon(Icons.search),
+                    color: Colors.black,
+                  ),
+                ],
+              ),
+            ),
+          ),
+          SizedBox (height: 20),
+          Expanded(child: _buildUserList()),
+        ],
+      ),
     );
   }
 
-  // Build list of users
-  Widget _buildUserList(){
+  Widget _buildUserList() {
     return StreamBuilder(
       stream: _chatService.getUsersStream(),
       builder: (context, snapshot) {
-        // Error handling
-        if (snapshot.hasError){
-          return const Text("Error");
+        if (snapshot.hasError) {
+          return Text("Error");
         }
-
-        // Loading indicator
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Text("Loading...");
+          return Text("Loading...");
         }
-
-        // Return list view
         return ListView(
-          children: snapshot.data!.map<Widget>((userData) => _buildUserListItem(userData, context))
-          .toList(),
+          children: snapshot.data!.map<Widget>((userData) => _buildUserListItem(userData, context)).toList(),
         );
-      }
+      },
     );
   }
 
-  // Build individual list user tile
-  Widget _buildUserListItem(Map<String, dynamic> userData, BuildContext context)
-  {
-    // Display all users except current user
+  Widget _buildUserListItem(Map<String, dynamic> userData, BuildContext context) {
     if (userData["email"] != _authService.getCurrentUser()!.email) {
       return UserTile(
         text: userData["email"],
         onTap: () {
-          // Tapped user
           Navigator.push(
-            context, 
+            context,
             MaterialPageRoute(
               builder: (context) => ChatPage(
                 receiverEmail: userData["email"],
@@ -81,8 +106,7 @@ class HomePage extends StatelessWidget {
           );
         },
       );
-    }
-    else {
+    } else {
       return Container();
     }
   }
