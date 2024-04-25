@@ -12,6 +12,7 @@ class MyDrawer extends StatefulWidget {
 }
 
 class _MyDrawerState extends State<MyDrawer> {
+  // ignore: unused_field
   bool _isHovered = false;
 
   void logout() {

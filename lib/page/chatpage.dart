@@ -129,7 +129,8 @@ class _ChatPageState extends State<ChatPage> {
     );
   }
 
-  Widget _buildMessageItem(DocumentSnapshot doc, int index, int totalCount) {
+  // Inside _buildMessageItem method
+Widget _buildMessageItem(DocumentSnapshot doc, int index, int totalCount) {
   Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
   bool isCurrentUser = data['senderID'] == _authService.getCurrentUser()!.uid;
 
@@ -159,12 +160,9 @@ class _ChatPageState extends State<ChatPage> {
   }
 
   return GestureDetector(
-    onTap: () {
-      Future.delayed(const Duration(milliseconds: 200), () {
-        setState(() {
-          lastClickedIndex = index;
-        });
-      });
+    onLongPress: () {
+      _messageController.text = '${data["message"]} ';
+      myFocusNode.requestFocus();
     },
     child: Column(
       crossAxisAlignment: isCurrentUser ? CrossAxisAlignment.end : CrossAxisAlignment.start,
@@ -174,7 +172,7 @@ class _ChatPageState extends State<ChatPage> {
           transform: lastClickedIndex == index ? Matrix4.translationValues(0, -5, 0) : Matrix4.translationValues(0, 0, 0),
           child: ChatBubble(message: data["message"], isCurrentUser: isCurrentUser),
         ),
-        if (shouldShowTime) // Show time only for the last message or the clicked one
+        if (shouldShowTime) 
           Text(
             timeString,
             style: const TextStyle(
@@ -186,6 +184,7 @@ class _ChatPageState extends State<ChatPage> {
     ),
   );
 }
+
 
 
   Widget _buildUserInput() {
