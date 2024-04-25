@@ -27,6 +27,7 @@ class _ChatPageState extends State<ChatPage> {
   final AuthService _authService = AuthService();
   FocusNode myFocusNode = FocusNode();
   final ScrollController _scrollController = ScrollController();
+  int lastClickedIndex = -1;
 
   @override
   void initState() {
@@ -64,6 +65,18 @@ class _ChatPageState extends State<ChatPage> {
     );
   }
 
+  void handleChatBubbleClick(int index) {
+  setState(() {
+    if (lastClickedIndex == index) {
+      // If the clicked message is the same as the last clicked one, reset lastClickedIndex
+      lastClickedIndex = -1;
+    } else {
+      // Otherwise, set lastClickedIndex to the clicked index
+      lastClickedIndex = index;
+    }
+  });
+}
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -95,58 +108,84 @@ class _ChatPageState extends State<ChatPage> {
   }
 
   Widget _buildMessageList() {
-  String senderID = _authService.getCurrentUser()!.uid;
-  return StreamBuilder(
-    stream: _chatService.getMessages(widget.receiverID, senderID),
-    builder: (context, snapshot) {
-      if (snapshot.hasError) {
-        return Text("Error");
-      }
-      if (snapshot.connectionState == ConnectionState.waiting) {
-        return Text("Loading...");
-      }
-      return ListView.builder(
-        controller: _scrollController,
-        itemCount: snapshot.data!.docs.length,
-        itemBuilder: (context, index) {
-          return _buildMessageItem(snapshot.data!.docs[index], index, snapshot.data!.docs.length);
-        },
-      );
-    },
-  );
-}
+    String senderID = _authService.getCurrentUser()!.uid;
+    return StreamBuilder(
+      stream: _chatService.getMessages(widget.receiverID, senderID),
+      builder: (context, snapshot) {
+        if (snapshot.hasError) {
+          return Text("Error");
+        }
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return Text("Loading...");
+        }
+        return ListView.builder(
+          controller: _scrollController,
+          itemCount: snapshot.data!.docs.length,
+          itemBuilder: (context, index) {
+            return _buildMessageItem(snapshot.data!.docs[index], index, snapshot.data!.docs.length);
+          },
+        );
+      },
+    );
+  }
 
   Widget _buildMessageItem(DocumentSnapshot doc, int index, int totalCount) {
   Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
   bool isCurrentUser = data['senderID'] == _authService.getCurrentUser()!.uid;
-  var alignmet = isCurrentUser ? Alignment.centerRight : Alignment.centerLeft;
 
   // Parse the timestamp from the data
   Timestamp timestamp = data['timestamp'] ?? Timestamp.now();
-  DateTime dateTime = timestamp.toDate();
+  DateTime messageDateTime = timestamp.toDate();
+
+  // Get the current time
+  DateTime now = DateTime.now();
+
+  // Calculate the difference in days
+  int differenceInDays = now.difference(messageDateTime).inDays;
 
   // Format the time based on the 12-hour clock format
-  String timeString = DateFormat.jm().format(dateTime); 
+  String timeString = DateFormat.jm().format(messageDateTime); 
 
-  // Check if this is the last message
-  bool isLastMessage = index == totalCount - 1;
+  // Check if this is the last message or if it matches the last clicked index
+  bool shouldShowTime = index == totalCount - 1 || index == lastClickedIndex;
 
-  return Column(
-    crossAxisAlignment: isCurrentUser ? CrossAxisAlignment.end : CrossAxisAlignment.start,
-    children: [
-      ChatBubble(message: data ["message"], isCurrentUser: isCurrentUser),
-      if (isLastMessage) // Show time only for the last message
-        Text(
-          timeString,
-          style: const TextStyle(
-            color: Colors.grey,
-            fontSize: 12,
-          ),
+  // Check if the message was sent more than 24 hours ago
+  if (differenceInDays > 1) {
+    // Show the day of the week if the message was sent more than 24 hours ago
+    timeString = DateFormat('EEEE').format(messageDateTime);
+  } else if (differenceInDays > 7) {
+    // Show the month and date if the message was sent more than 7 days ago
+    timeString = DateFormat('MMM d').format(messageDateTime);
+  }
+
+  return GestureDetector(
+    onTap: () {
+      Future.delayed(const Duration(milliseconds: 200), () {
+        setState(() {
+          lastClickedIndex = index;
+        });
+      });
+    },
+    child: Column(
+      crossAxisAlignment: isCurrentUser ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+      children: [
+        AnimatedContainer(
+          duration: Duration(milliseconds: 500),
+          transform: lastClickedIndex == index ? Matrix4.translationValues(0, -5, 0) : Matrix4.translationValues(0, 0, 0),
+          child: ChatBubble(message: data["message"], isCurrentUser: isCurrentUser),
         ),
-    ],
+        if (shouldShowTime) // Show time only for the last message or the clicked one
+          Text(
+            timeString,
+            style: const TextStyle(
+              color: Colors.grey,
+              fontSize: 12,
+            ),
+          ),
+      ],
+    ),
   );
 }
-
 
 
   Widget _buildUserInput() {

@@ -17,7 +17,7 @@ class _HomePageState extends State<HomePage> {
   final ChatService _chatService = ChatService();
   final AuthService _authService = AuthService();
   late List<Map<String, dynamic>> _users;
-  late List<Map<String, dynamic>> _filteredUsers;
+  late List<Map<String, dynamic>> _filteredUsers = [];
 
   @override
   void initState() {
@@ -26,11 +26,10 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _initializeUsers() {
-    // Retrieve all users from the ChatService
     _chatService.getUsersStream().listen((users) {
       setState(() {
-        _users = List.from(users); // Store all users
-        _filteredUsers = List.from(users); // Initialize filtered users with all users
+        _users = List.from(users);
+        _filteredUsers = List.from(users);
       });
     });
   }
@@ -38,11 +37,10 @@ class _HomePageState extends State<HomePage> {
   void _searchUser(String query) {
     setState(() {
       if (query.isEmpty) {
-        // If the search query is empty, display all users
         _filteredUsers = List.from(_users);
       } else {
-        // Filter users whose email contains the search query
-        _filteredUsers = _users.where((user) => user["email"].contains(query)).toList();
+        _filteredUsers =
+            _users.where((user) => user["email"].contains(query)).toList();
       }
     });
   }
@@ -78,23 +76,21 @@ class _HomePageState extends State<HomePage> {
                     child: Container(
                       height: double.infinity,
                       decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(5), // Set border radius here
+                        borderRadius: BorderRadius.circular(5),
                         color: Theme.of(context).colorScheme.secondary,
                       ),
                       child: TextField(
-                        onChanged: _searchUser, // Call _searchUser on text change
+                        onChanged: _searchUser,
                         decoration: InputDecoration(
                           hintText: "Search",
                           border: InputBorder.none,
-                          contentPadding: EdgeInsets.only(left: 16), // Adjust only the left padding here
+                          contentPadding: EdgeInsets.only(left: 16),
                         ),
                       ),
                     ),
                   ),
                   IconButton(
-                    onPressed: () {
-                      // No need for search functionality here
-                    },
+                    onPressed: () {},
                     icon: Icon(Icons.search),
                     color: Colors.black,
                   ),
@@ -119,45 +115,43 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _buildUserListItem(Map<String, dynamic> userData, BuildContext context) {
-  if (userData["email"] != _authService.getCurrentUser()!.email) {
-    return Dismissible(
-      key: Key(userData["uid"]), // Unique key for each user
-      direction: DismissDirection.endToStart, // Allow swipe from right to left
-      background: Container(
-        alignment: Alignment.centerRight,
-        color: Colors.red, // Background color when swiping
-        child: Padding(
-          padding: const EdgeInsets.only(right: 16.0),
-          child: Icon(
-            Icons.delete,
-            color: Colors.white,
+    if (userData["email"] != _authService.getCurrentUser()!.email) {
+      return Dismissible(
+        key: Key(userData["uid"]),
+        direction: DismissDirection.endToStart,
+        background: Container(
+          alignment: Alignment.centerRight,
+          color: Colors.red,
+          child: Padding(
+            padding: const EdgeInsets.only(right: 16.0),
+            child: Icon(
+              Icons.delete,
+              color: Colors.white,
+            ),
           ),
         ),
-      ),
-      onDismissed: (direction) {
-        // Implement your deletion logic here
-        setState(() {
-          // Remove the user from the list
-          _filteredUsers.remove(userData);
-        });
-      },
-      child: UserTile(
-        text: userData["email"],
-        onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => ChatPage(
-                receiverEmail: userData["email"],
-                receiverID: userData["uid"],
-              ),
-            ),
-          );
+        onDismissed: (direction) {
+          setState(() {
+            _filteredUsers.remove(userData);
+          });
         },
-      ),
-    );
-  } else {
-    return Container();
+        child: UserTile(
+          text: userData["email"],
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => ChatPage(
+                  receiverEmail: userData["email"],
+                  receiverID: userData["uid"],
+                ),
+              ),
+            );
+          },
+        ),
+      );
+    } else {
+      return Container();
+    }
   }
-}
 }
