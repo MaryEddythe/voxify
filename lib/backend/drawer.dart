@@ -1,9 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:verbalize/page/about.dart';
 import 'package:verbalize/services/auth/authservice.dart';
 import 'package:verbalize/page/settings.dart';
 
-class MyDrawer extends StatelessWidget {
+class MyDrawer extends StatefulWidget {
   const MyDrawer({Key? key});
+
+  @override
+  State<MyDrawer> createState() => _MyDrawerState();
+}
+
+class _MyDrawerState extends State<MyDrawer> {
+  bool _isHovered = false;
 
   void logout() {
     // Get auth service
@@ -33,9 +42,16 @@ class MyDrawer extends StatelessWidget {
 
               // List tiles
               Padding(
-                padding: const EdgeInsets.only(left: 25.0),
+                padding: const EdgeInsets.only(left: 15.0),
                 child: ListTile(
-                  title: const Text("HOME"),
+                  title: Text(
+                    "HOME",
+                    style: GoogleFonts.poppins(
+                      textStyle: const TextStyle(
+                        color: Colors.black,
+                      ),
+                    ),
+                  ),
                   leading: const Icon(Icons.home),
                   onTap: () {
                     // Pop drawer
@@ -45,22 +61,68 @@ class MyDrawer extends StatelessWidget {
               ),
 
               Padding(
-                padding: const EdgeInsets.only(left: 25.0),
-                child: ListTile(
-                  title: const Text("SETTINGS"),
-                  leading: const Icon(Icons.settings),
-                  onTap: () {
-                    // Pop drawer
-                    Navigator.pop(context);
-
-                    // Go to settings page
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const SettingsPage(),
+                padding: const EdgeInsets.only(left: 15.0),
+                child: MouseRegion(
+                  onEnter: (_) => setState(() => _isHovered = true),
+                  onExit: (_) => setState(() => _isHovered = false),
+                  child: ListTile(
+                    title: Text(
+                      "THEMES",
+                      style: GoogleFonts.poppins(
+                        textStyle: TextStyle(
+                          color: Colors.black,
+                        ),
                       ),
-                    );
-                  },
+                    ),
+
+
+                    leading: const Icon(Icons.settings),
+                    onTap: () {
+                      // Pop drawer
+                      Navigator.pop(context);
+
+                      // Go to settings page
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const SettingsPage(),
+                        ),
+                      );
+                    },
+                  ),
+                ),
+              ),
+
+              Padding(
+                padding: const EdgeInsets.only(left: 15.0),
+                child: MouseRegion(
+                  onEnter: (_) => setState(() => _isHovered = true),
+                  onExit: (_) => setState(() => _isHovered = false),
+                  child: ListTile(
+                    title: Text(
+                      "ABOUT US",
+                      style: GoogleFonts.poppins(
+                        textStyle: TextStyle(
+                          color: Colors.black,
+                        ),
+                      ),
+                    ),
+
+
+                    leading: const Icon(Icons.settings),
+                    onTap: () {
+                      // Pop drawer
+                      Navigator.pop(context);
+
+                      // Go to settings page
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const AboutPage(),
+                        ),
+                      );
+                    },
+                  ),
                 ),
               ),
             ],
@@ -68,9 +130,16 @@ class MyDrawer extends StatelessWidget {
 
           // Logout ListTile
           Padding(
-            padding: const EdgeInsets.only(left: 25.0, bottom: 25.0),
+            padding: const EdgeInsets.only(left: 15.0, bottom: 25.0),
             child: ListTile(
-              title: const Text("LOGOUT"),
+              title: Text(
+                "LOGOUT",
+                style: GoogleFonts.poppins(
+                  textStyle: const TextStyle(
+                    color: Colors.black,
+                  ),
+                ),
+              ),
               leading: const Icon(Icons.logout),
               onTap: logout,
             ),
