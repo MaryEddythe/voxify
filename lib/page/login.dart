@@ -1,70 +1,89 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:verbalize/services/auth/authservice.dart';
 import 'package:verbalize/backend/button.dart';
 import 'package:verbalize/backend/textfield.dart';
 
 class Login extends StatelessWidget {
-  //email and pass controller//
+  // email and pass controller//
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
-  //tap register//
+  // tap register//
   final void Function()? onTap;
 
-   Login({super.key,  required this.onTap});
+  Login({Key? key, required this.onTap});
 
-   //login methid//
-   void login(BuildContext context) async {
-
-    //get auth serv//
+  // login method//
+  void login(BuildContext context) async {
+    // get auth serv//
     final authService = AuthService();
 
-    //try u login
+    // try u login
     try {
       await authService.signInWithEmailPassword(
-        _emailController.text, 
+        _emailController.text,
         _passwordController.text,
-        );
-    }
-
-    //if may error
-    catch (e) {
-      showDialog(
-      context: context, 
-      builder: (context) => AlertDialog(
-        title: Text(e.toString()),
-      ),
       );
     }
-
-   }
+    // if may error
+    catch (e) {
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: Text(e.toString()),
+        ),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
-
-
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            //logo message//
-            Icon(Icons.message,
-            size: 60,
-            color: Theme.of(context).colorScheme.primary,
-            ),
-
-            //welcome message//
-            const SizedBox(height: 50,),
-            Text("Welcome to Voxify! Dive in, connect, and let the conversations begin!", 
-            style: TextStyle(
+            // logo message//
+            Icon(
+              Icons.message,
+              size: 60,
               color: Theme.of(context).colorScheme.primary,
-              fontSize: 16,
-            ),
             ),
 
-            //email//
+            // welcome message//
+            const SizedBox(height: 20), // Adjusted size for spacing
+            Center(
+              child: Column(
+                children: [
+                  Text(
+                    "Welcome to Quippy!",
+                    style: GoogleFonts.lexend(
+                      textStyle: TextStyle(
+                        color: Theme.of(context).colorScheme.inversePrimary,
+                        fontSize: 22,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                  ),
+                  //SizedBox(height: 5), // Added space between texts
+                  Text(
+                    "Dive in, connect, and let the conversations begin!",
+                    textAlign: TextAlign.center,
+                    style: GoogleFonts.lexend(
+                      textStyle: TextStyle(
+                        color: Theme.of(context).colorScheme.inversePrimary,
+                        fontSize: 18,
+                        fontWeight: FontWeight.normal,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+
+            // email//
             const SizedBox(height: 20),
             MyTextField(
               hintText: "Email",
@@ -72,7 +91,7 @@ class Login extends StatelessWidget {
               controller: _emailController,
             ),
 
-            //pass//
+            // pass//
             const SizedBox(height: 10),
             MyTextField(
               hintText: "Password",
@@ -80,27 +99,36 @@ class Login extends StatelessWidget {
               controller: _passwordController,
             ),
 
-            //login//
+            // login//
             const SizedBox(height: 25),
             MyButton(
               text: "Login",
               onTap: () => login(context),
             ),
 
-            //reg//
+            // reg//
             const SizedBox(height: 25),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text("Don't have an account? ",
-                style: TextStyle(color: Theme.of(context).colorScheme.primary),
+                Text(
+                  "Don't have an account? ",
+                  style: GoogleFonts.lexend(
+                    textStyle: TextStyle(
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
+                  ),
                 ),
                 GestureDetector(
                   onTap: onTap,
-                  child: Text("Register Now!",
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: Theme.of(context).colorScheme.primary),
+                  child: Text(
+                    "Register Now!",
+                    style: GoogleFonts.lexend(
+                      textStyle: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
+                    ),
                   ),
                 ),
               ],
