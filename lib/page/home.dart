@@ -72,6 +72,15 @@ class _HomePageState extends State<HomePage> {
               padding: const EdgeInsets.symmetric(horizontal: 30.0),
               child: Row(
                 children: [
+                  Container(
+                    width: 50,
+                    height: double.infinity,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(5),
+                      color: Theme.of(context).colorScheme.secondary,
+                    ),
+                    child: Icon(Icons.search, color: Colors.black),
+                  ),
                   Expanded(
                     child: Container(
                       height: double.infinity,
@@ -88,11 +97,6 @@ class _HomePageState extends State<HomePage> {
                         ),
                       ),
                     ),
-                  ),
-                  IconButton(
-                    onPressed: () {},
-                    icon: Icon(Icons.search),
-                    color: Colors.black,
                   ),
                 ],
               ),
