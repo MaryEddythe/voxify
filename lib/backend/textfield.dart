@@ -23,20 +23,22 @@ class MyTextField extends StatelessWidget {
         obscureText: obscureText,
         controller: controller,
         focusNode: focusNode,
-        style: GoogleFonts.poppins( // Apply Google Font Poppins to the text field style
-          textStyle: TextStyle(color: Colors.black), // Set text color to black
+        style: GoogleFonts.poppins(
+          textStyle: TextStyle(color: Colors.black),
         ),
         decoration: InputDecoration(
           enabledBorder: OutlineInputBorder(
             borderSide: BorderSide(color: Theme.of(context).colorScheme.tertiary),
+            borderRadius: BorderRadius.circular(30), // Set border radius here
           ),
           focusedBorder: OutlineInputBorder(
             borderSide: BorderSide(color: Theme.of(context).colorScheme.primary),
+            borderRadius: BorderRadius.circular(30), // Set border radius here
           ),
           fillColor: Theme.of(context).colorScheme.secondary,
           filled: true,
           hintText: hintText,
-          hintStyle: GoogleFonts.poppins( // Apply Google Font Poppins to the hint text style
+          hintStyle: GoogleFonts.poppins(
             textStyle: TextStyle(color: Theme.of(context).colorScheme.primary),
           ),
         ),

@@ -186,36 +186,51 @@ Widget _buildMessageItem(DocumentSnapshot doc, int index, int totalCount) {
 }
 
 
-
-  Widget _buildUserInput() {
-    return Padding(
-      padding: const EdgeInsets.only(top: 10, bottom: 50.0),
-      child: Row(
-        children: [
-          Expanded(
-            child: MyTextField(
-              controller: _messageController,
-              hintText: "Type a message",
-              obscureText: false,
-              focusNode: myFocusNode,
-            ),
+ Widget _buildUserInput() {
+  return Padding(
+    padding: const EdgeInsets.only(top: 10, bottom: 50.0, left: 15, right: 0),
+    child: Row(
+      children: [
+        IconButton(
+          onPressed: () {
+            // Add your logic to handle emoji button press
+          },
+          icon: const Icon(
+            Icons.emoji_emotions, // Use any emoji icon you prefer
+            color: Color(0xff5072A7),
           ),
-          Container(
-            decoration: const BoxDecoration(
-              color: Color(0xff5072A7),
-              shape: BoxShape.circle
-            ),
-            margin: const EdgeInsets.only(right: 25.0),
-            child: IconButton(
-              onPressed: sendMessage, 
-              icon: const Icon(
-                Icons.arrow_upward, 
-                color: Colors.white,
+        ),
+        Expanded(
+          child: Stack(
+            children: [
+              MyTextField(
+                controller: _messageController,
+                hintText: "Type a message",
+                obscureText: false,
+                focusNode: myFocusNode,
               ),
-            ),
+              Positioned(
+                right: 40, // Adjust this value as needed to move the button more to the left
+                bottom: 7,
+                child: Container(
+                  decoration: const BoxDecoration(
+                    //color: Color(0xff5072A7),
+                    shape: BoxShape.circle,
+                  ),
+                  child: IconButton(
+                    onPressed: sendMessage,
+                    icon: const Icon(
+                      Icons.send,
+                      color: Color(0xff5072A7),
+                    ),
+                  ),
+                ),
+              ),
+            ],
           ),
-        ],
-      ),
-    );
-  }
+        ),
+      ],
+    ),
+  );
+}
 }
