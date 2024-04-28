@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:verbalize/page/about.dart';
+import 'package:verbalize/page/dev.dart';
 import 'package:verbalize/services/auth/authservice.dart';
 import 'package:verbalize/page/settings.dart';
 
@@ -75,8 +76,6 @@ class _MyDrawerState extends State<MyDrawer> {
                         ),
                       ),
                     ),
-
-
                     leading: const Icon(Icons.settings),
                     onTap: () {
                       // Pop drawer
@@ -108,18 +107,47 @@ class _MyDrawerState extends State<MyDrawer> {
                         ),
                       ),
                     ),
-
-
                     leading: const Icon(Icons.settings),
                     onTap: () {
                       // Pop drawer
                       Navigator.pop(context);
 
-                      // Go to settings page
+                      // Go to about page
                       Navigator.push(
                         context,
                         MaterialPageRoute(
                           builder: (context) => const AboutPage(),
+                        ),
+                      );
+                    },
+                  ),
+                ),
+              ),
+
+              Padding(
+                padding: const EdgeInsets.only(left: 15.0),
+                child: MouseRegion(
+                  onEnter: (_) => setState(() => _isHovered = true),
+                  onExit: (_) => setState(() => _isHovered = false),
+                  child: ListTile(
+                    title: Text(
+                      "DEVELOPERS",
+                      style: GoogleFonts.poppins(
+                        textStyle: TextStyle(
+                          color: Colors.black,
+                        ),
+                      ),
+                    ),
+                    leading: const Icon(Icons.settings),
+                    onTap: () {
+                      // Pop drawer
+                      Navigator.pop(context);
+
+                      // Go to about page
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const Developers(),
                         ),
                       );
                     },

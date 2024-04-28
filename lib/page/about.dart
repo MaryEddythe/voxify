@@ -1,8 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class AboutPage extends StatelessWidget {
-  const AboutPage({Key? key});
+class AboutPage extends StatefulWidget {
+  const AboutPage({Key? key}) : super(key: key);
+
+  @override
+  _AboutPageState createState() => _AboutPageState();
+}
+
+class _AboutPageState extends State
+{
+  late bool _fadeIn = false;
+
+  @override
+  void initState() {
+    super.initState();
+    // Delaying the animation to start after the page is fully loaded
+    Future.delayed(Duration(milliseconds: 700), () {
+      setState(() {
+        _fadeIn = true;
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -38,10 +57,13 @@ class AboutPage extends StatelessWidget {
               color: Colors.black.withOpacity(0.7), // Adjust opacity as needed
             ),
           ),
-          Positioned.fill(
+          AnimatedOpacity(
+            duration: Duration(milliseconds: 700),
+            opacity: _fadeIn ? 1.0 : 0.0,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
+                SizedBox(height: 1), // Added padding to lower the text
                 Text(
                   'Welcome to Quippy!',
                   style: GoogleFonts.playfairDisplay(
@@ -50,24 +72,30 @@ class AboutPage extends StatelessWidget {
                     fontWeight: FontWeight.w700,
                   ),
                 ),
-                SizedBox(height: 20),
-                Text(
-                  'Quippy is a sleek and intuitive messaging app designed to streamline your conversations. Stay connected with friends, family, and colleagues through instant messaging. With Quippy, communication has never been easier!',
-                  textAlign: TextAlign.center,
-                  style: GoogleFonts.poppins(
-                    color: Colors.white,
-                    fontSize: 12,
-                    fontWeight: FontWeight.w300,
+                SizedBox(height: 30), // Added padding to lower the text
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: Text(
+                    'Quippy is a sleek and intuitive messaging app designed to streamline your conversations. Stay connected with friends, family, and colleagues through instant messaging. With Quippy, communication has never been easier!',
+                    textAlign: TextAlign.center,
+                    style: GoogleFonts.poppins(
+                      color: Colors.white,
+                      fontSize: 12,
+                      fontWeight: FontWeight.w300,
+                    ),
                   ),
                 ),
-                SizedBox(height: 20),
-                Text(
-                  'Designed for the modern communicator who values wit, brevity, and spontaneity, Quippy lets you express yourself with style and flair. Whether youu are sending a quick message to a friend, engaging in a lively group chat, or sharing your thoughts with the world, Quippy provides the perfect platform for every conversation',
-                  textAlign: TextAlign.center,
-                  style: GoogleFonts.poppins(
-                    color: Colors.white,
-                    fontSize: 12,
-                    fontWeight: FontWeight.w300,
+                SizedBox(height: 20), // Added padding to lower the text
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: Text(
+                    'Designed for the modern communicator who values wit, brevity, and spontaneity, Quippy lets you express yourself with style and flair. Whether you are sending a quick message to a friend, engaging in a lively group chat, or sharing your thoughts with the world, Quippy provides the perfect platform for every conversation',
+                    textAlign: TextAlign.center,
+                    style: GoogleFonts.poppins(
+                      color: Colors.white,
+                      fontSize: 12,
+                      fontWeight: FontWeight.w300,
+                    ),
                   ),
                 ),
               ],
