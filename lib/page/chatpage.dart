@@ -12,7 +12,7 @@ class ChatPage extends StatefulWidget {
   final String receiverID;
 
   ChatPage({
-    Key? key, 
+    Key? key,
     required this.receiverEmail,
     required this.receiverID,
   }) : super(key: key);
@@ -201,6 +201,15 @@ class _ChatPageState extends State<ChatPage> {
       padding: const EdgeInsets.only(top: 10, bottom: 50.0, left: 15, right: 0),
       child: Row(
         children: [
+          IconButton(
+            onPressed: () {
+              // Add your logic to handle emoji button press
+            },
+            icon: const Icon(
+              Icons.image, // Use any emoji icon you prefer
+              color: Color(0xff5072A7),
+            ),
+          ),
           Expanded(
             child: Stack(
               children: [
@@ -211,19 +220,18 @@ class _ChatPageState extends State<ChatPage> {
                   focusNode: myFocusNode,
                 ),
                 Positioned(
-                  right: 40,
-                  // Adjust this value as needed to move the button more to the left
+                  right: 40, // Adjust this value as needed to move the button more to the left
                   bottom: 7,
                   child: Container(
                     decoration: const BoxDecoration(
-                      //color: Color(0xff5072A7),
+                      color: Color(0xff5072A7),
                       shape: BoxShape.circle,
                     ),
                     child: IconButton(
                       onPressed: sendMessage,
                       icon: const Icon(
                         Icons.send,
-                        color: Color(0xff5072A7),
+                        color: Colors.white,
                       ),
                     ),
                   ),
