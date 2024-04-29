@@ -4,30 +4,36 @@ import 'package:verbalize/services/auth/authservice.dart';
 import 'package:verbalize/backend/button.dart';
 import 'package:verbalize/backend/textfield.dart';
 
-class Login extends StatelessWidget {
-  // email and pass controller//
+class Login extends StatefulWidget {
+  final void Function()? onTap;
+
+  Login({Key? key, required this.onTap}) : super(key: key);
+
+  @override
+  _LoginState createState() => _LoginState();
+}
+
+class _LoginState extends State<Login> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
-  // tap register//
-  final void Function()? onTap;
+  bool _isObscure = true; // Track password visibility
 
-  Login({Key? key, required this.onTap});
+  void _togglePasswordVisibility() {
+    setState(() {
+      _isObscure = !_isObscure;
+    });
+  }
 
-  // login method//
   void login(BuildContext context) async {
-    // get auth serv//
     final authService = AuthService();
 
-    // try u login
     try {
       await authService.signInWithEmailPassword(
         _emailController.text,
         _passwordController.text,
       );
-    }
-    // if may error
-    catch (e) {
+    } catch (e) {
       showDialog(
         context: context,
         builder: (context) => AlertDialog(
@@ -43,7 +49,7 @@ class Login extends StatelessWidget {
       body: Container(
         decoration: BoxDecoration(
           image: DecorationImage(
-            image: AssetImage("assets/wala.jpg"), 
+            image: AssetImage("assets/wala.jpg"),
             fit: BoxFit.cover,
           ),
         ),
@@ -52,15 +58,12 @@ class Login extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                // logo image//
                 Image.asset(
-                  "assets/logo.png", // Change to your logo image path
-                  width: 150, // Adjust the width as needed
-                  height: 150, // Adjust the height as needed
+                  "assets/logo.png",
+                  width: 150,
+                  height: 150,
                 ),
-
-                // welcome message//
-                const SizedBox(height: 20), // Adjusted size for spacing
+                const SizedBox(height: 20),
                 Center(
                   child: Column(
                     children: [
@@ -74,7 +77,6 @@ class Login extends StatelessWidget {
                           ),
                         ),
                       ),
-                      //SizedBox(height: 5), // Added space between texts
                       Text(
                         "Dive in, connect, and let the conversations begin!",
                         textAlign: TextAlign.center,
@@ -89,31 +91,27 @@ class Login extends StatelessWidget {
                     ],
                   ),
                 ),
-
-                // email//
                 const SizedBox(height: 20),
                 MyTextField(
                   hintText: "Email",
                   obscureText: false,
                   controller: _emailController,
                 ),
-
-                // pass//
                 const SizedBox(height: 10),
                 MyTextField(
                   hintText: "Password",
-                  obscureText: true,
+                  obscureText: _isObscure,
                   controller: _passwordController,
+                  suffix: IconButton(
+                    icon: Icon(_isObscure ? Icons.visibility : Icons.visibility_off),
+                    onPressed: _togglePasswordVisibility,
+                  ),
                 ),
-
-                // login//
                 const SizedBox(height: 25),
                 MyButton(
                   text: "Login",
                   onTap: () => login(context),
                 ),
-
-                // reg//
                 const SizedBox(height: 25),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -127,7 +125,7 @@ class Login extends StatelessWidget {
                       ),
                     ),
                     GestureDetector(
-                      onTap: onTap,
+                      onTap: widget.onTap,
                       child: Text(
                         "Register Now!",
                         style: GoogleFonts.lexend(

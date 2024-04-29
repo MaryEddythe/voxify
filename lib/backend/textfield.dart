@@ -5,14 +5,16 @@ class MyTextField extends StatelessWidget {
   final String hintText;
   final bool obscureText;
   final TextEditingController controller;
-  final FocusNode? focusNode;
+  final Widget? suffix; // Add a nullable Widget parameter for the suffix
+  final FocusNode? focusNode; // Add a nullable FocusNode parameter
 
   const MyTextField({
     Key? key,
     required this.hintText,
     required this.obscureText,
     required this.controller,
-    this.focusNode,
+    this.focusNode, // Mark focusNode as nullable
+    this.suffix, // Provide a default value or make it nullable
   }) : super(key: key);
 
   @override
@@ -29,11 +31,11 @@ class MyTextField extends StatelessWidget {
         decoration: InputDecoration(
           enabledBorder: OutlineInputBorder(
             borderSide: BorderSide(color: Theme.of(context).colorScheme.tertiary),
-            borderRadius: BorderRadius.circular(30), // Set border radius here
+            borderRadius: BorderRadius.circular(30),
           ),
           focusedBorder: OutlineInputBorder(
             borderSide: BorderSide(color: Theme.of(context).colorScheme.primary),
-            borderRadius: BorderRadius.circular(30), // Set border radius here
+            borderRadius: BorderRadius.circular(30),
           ),
           fillColor: Theme.of(context).colorScheme.secondary,
           filled: true,
@@ -41,6 +43,7 @@ class MyTextField extends StatelessWidget {
           hintStyle: GoogleFonts.poppins(
             textStyle: TextStyle(color: Theme.of(context).colorScheme.primary),
           ),
+          suffixIcon: suffix, // Use the provided suffix
         ),
       ),
     );

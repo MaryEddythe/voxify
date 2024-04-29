@@ -36,7 +36,7 @@ class _ChatPageState extends State<ChatPage> {
       if (myFocusNode.hasFocus) {
         Future.delayed(
           const Duration(milliseconds: 500),
-              () => scrollDown(),
+          () => scrollDown(),
         );
       }
     });
@@ -81,10 +81,7 @@ class _ChatPageState extends State<ChatPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme
-          .of(context)
-          .colorScheme
-          .background,
+      backgroundColor: Theme.of(context).colorScheme.background,
       appBar: AppBar(
         title: Text(
           widget.receiverEmail,
@@ -147,9 +144,7 @@ class _ChatPageState extends State<ChatPage> {
     DateTime now = DateTime.now();
 
     // Calculate the difference in days
-    int differenceInDays = now
-        .difference(messageDateTime)
-        .inDays;
+    int differenceInDays = now.difference(messageDateTime).inDays;
 
     // Format the time based on the 12-hour clock format
     String timeString = DateFormat.jm().format(messageDateTime);
@@ -178,8 +173,9 @@ class _ChatPageState extends State<ChatPage> {
         children: [
           AnimatedContainer(
             duration: Duration(milliseconds: 500),
-            transform: lastClickedIndex == index ? Matrix4.translationValues(
-                0, -5, 0) : Matrix4.translationValues(0, 0, 0),
+            transform: lastClickedIndex == index
+                ? Matrix4.translationValues(0, -5, 0)
+                : Matrix4.translationValues(0, 0, 0),
             child: ChatBubble(
                 message: data["message"], isCurrentUser: isCurrentUser),
           ),
@@ -218,6 +214,13 @@ class _ChatPageState extends State<ChatPage> {
                   hintText: "Type a message",
                   obscureText: false,
                   focusNode: myFocusNode,
+                  suffix: IconButton(
+                    onPressed: () {}, // Placeholder onPressed function
+                    icon: Icon(
+                      Icons.send,
+                      color: Theme.of(context).primaryColor,
+                    ),
+                  ),
                 ),
                 Positioned(
                   right: 40, // Adjust this value as needed to move the button more to the left
