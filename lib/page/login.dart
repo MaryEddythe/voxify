@@ -40,100 +40,109 @@ class Login extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.background,
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            // logo message//
-            Icon(
-              Icons.message,
-              size: 60,
-              color: Theme.of(context).colorScheme.primary,
-            ),
-
-            // welcome message//
-            const SizedBox(height: 20), // Adjusted size for spacing
-            Center(
-              child: Column(
-                children: [
-                  Text(
-                    "Welcome to Quippy!",
-                    style: GoogleFonts.lexend(
-                      textStyle: TextStyle(
-                        color: Theme.of(context).colorScheme.inversePrimary,
-                        fontSize: 22,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                  ),
-                  //SizedBox(height: 5), // Added space between texts
-                  Text(
-                    "Dive in, connect, and let the conversations begin!",
-                    textAlign: TextAlign.center,
-                    style: GoogleFonts.lexend(
-                      textStyle: TextStyle(
-                        color: Theme.of(context).colorScheme.inversePrimary,
-                        fontSize: 18,
-                        fontWeight: FontWeight.normal,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-
-            // email//
-            const SizedBox(height: 20),
-            MyTextField(
-              hintText: "Email",
-              obscureText: false,
-              controller: _emailController,
-            ),
-
-            // pass//
-            const SizedBox(height: 10),
-            MyTextField(
-              hintText: "Password",
-              obscureText: true,
-              controller: _passwordController,
-            ),
-
-            // login//
-            const SizedBox(height: 25),
-            MyButton(
-              text: "Login",
-              onTap: () => login(context),
-            ),
-
-            // reg//
-            const SizedBox(height: 25),
-            Row(
+      body: Container(
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage("assets/wala.jpg"), 
+            fit: BoxFit.cover,
+          ),
+        ),
+        child: Center(
+          child: SingleChildScrollView(
+            child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text(
-                  "Don't have an account? ",
-                  style: GoogleFonts.lexend(
-                    textStyle: TextStyle(
-                      color: Theme.of(context).colorScheme.primary,
-                    ),
+                // logo image//
+                Image.asset(
+                  "assets/logo.png", // Change to your logo image path
+                  width: 150, // Adjust the width as needed
+                  height: 150, // Adjust the height as needed
+                ),
+
+                // welcome message//
+                const SizedBox(height: 20), // Adjusted size for spacing
+                Center(
+                  child: Column(
+                    children: [
+                      Text(
+                        "Welcome to Quippy!",
+                        style: GoogleFonts.lexend(
+                          textStyle: TextStyle(
+                            color: Theme.of(context).colorScheme.inversePrimary,
+                            fontSize: 22,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                      ),
+                      //SizedBox(height: 5), // Added space between texts
+                      Text(
+                        "Dive in, connect, and let the conversations begin!",
+                        textAlign: TextAlign.center,
+                        style: GoogleFonts.lexend(
+                          textStyle: TextStyle(
+                            color: Theme.of(context).colorScheme.inversePrimary,
+                            fontSize: 18,
+                            fontWeight: FontWeight.normal,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-                GestureDetector(
-                  onTap: onTap,
-                  child: Text(
-                    "Register Now!",
-                    style: GoogleFonts.lexend(
-                      textStyle: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: Theme.of(context).colorScheme.primary,
+
+                // email//
+                const SizedBox(height: 20),
+                MyTextField(
+                  hintText: "Email",
+                  obscureText: false,
+                  controller: _emailController,
+                ),
+
+                // pass//
+                const SizedBox(height: 10),
+                MyTextField(
+                  hintText: "Password",
+                  obscureText: true,
+                  controller: _passwordController,
+                ),
+
+                // login//
+                const SizedBox(height: 25),
+                MyButton(
+                  text: "Login",
+                  onTap: () => login(context),
+                ),
+
+                // reg//
+                const SizedBox(height: 25),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      "Don't have an account? ",
+                      style: GoogleFonts.lexend(
+                        textStyle: TextStyle(
+                          color: Theme.of(context).colorScheme.primary,
+                        ),
                       ),
                     ),
-                  ),
+                    GestureDetector(
+                      onTap: onTap,
+                      child: Text(
+                        "Register Now!",
+                        style: GoogleFonts.lexend(
+                          textStyle: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Theme.of(context).colorScheme.primary,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),
-          ],
+          ),
         ),
       ),
     );
