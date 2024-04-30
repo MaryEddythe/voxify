@@ -5,6 +5,8 @@ import 'package:verbalize/backend/usertile.dart';
 import 'package:verbalize/page/chatpage.dart';
 import 'package:verbalize/services/auth/authservice.dart';
 import 'package:verbalize/services/chat/chat.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 
 class HomePage extends StatefulWidget {
   HomePage({Key? key});
@@ -118,44 +120,61 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget _buildUserListItem(Map<String, dynamic> userData, BuildContext context) {
-    if (userData["email"] != _authService.getCurrentUser()!.email) {
-      return Dismissible(
-        key: Key(userData["uid"]),
-        direction: DismissDirection.endToStart,
-        background: Container(
-          alignment: Alignment.centerRight,
-          color: Colors.red,
-          child: Padding(
-            padding: const EdgeInsets.only(right: 16.0),
-            child: Icon(
-              Icons.delete,
-              color: Colors.white,
-            ),
-          ),
-        ),
-        onDismissed: (direction) {
-          setState(() {
-            _filteredUsers.remove(userData);
-          });
-        },
-        child: UserTile(
-          text: userData["email"],
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => ChatPage(
-                  receiverEmail: userData["email"],
-                  receiverID: userData["uid"],
+ Widget _buildUserListItem(Map<String, dynamic> userData, BuildContext context) {
+  if (userData["email"] != _authService.getCurrentUser()!.email) {
+    return StreamBuilder(
+      stream: _chatService.getMessages(_authService.getCurrentUser()!.uid, userData["uid"]), // Fetch the messages stream
+      builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return CircularProgressIndicator(); // Show loading indicator while fetching data
+        } else {
+          if (snapshot.hasError) {
+            return Text('Error: ${snapshot.error}');
+          } else {
+            final lastMessage = snapshot.data!.docs.isNotEmpty ? snapshot.data!.docs.last['message'] : ''; // Get the last message from the snapshot
+            final sender = snapshot.data!.docs.isNotEmpty ? snapshot.data!.docs.last['senderEmail'] : ''; // Get the sender's email from the last message
+            return Dismissible(
+              key: Key(userData["uid"]),
+              direction: DismissDirection.endToStart,
+              background: Container(
+                alignment: Alignment.centerRight,
+                color: Colors.red,
+                child: Padding(
+                  padding: const EdgeInsets.only(right: 16.0),
+                  child: Icon(
+                    Icons.delete,
+                    color: Colors.black,
+                  ),
                 ),
               ),
+              onDismissed: (direction) {
+                setState(() {
+                  _filteredUsers.remove(userData);
+                });
+              },
+              child: UserTile(
+                text: userData["email"],
+                lastMessage: lastMessage,
+                sender: sender, // Pass the sender's information
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ChatPage(
+                        receiverEmail: userData["email"],
+                        receiverID: userData["uid"],
+                      ),
+                    ),
+                  );
+                },
+              ),
             );
-          },
-        ),
-      );
-    } else {
-      return Container();
-    }
+          }
+        }
+      },
+    );
+  } else {
+    return Container();
   }
+}
 }

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:verbalize/backend/chat_bubble.dart';
 import 'package:verbalize/backend/textfield.dart';
+import 'package:verbalize/models/message.dart';
 import 'package:verbalize/services/auth/authservice.dart';
 import 'package:verbalize/services/chat/chat.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -86,7 +87,7 @@ class _ChatPageState extends State<ChatPage> {
         title: Text(
           widget.receiverEmail,
           style: GoogleFonts.poppins(
-            textStyle: TextStyle(
+            textStyle: const TextStyle(
               color: Color.fromARGB(255, 69, 67, 67),
               fontWeight: FontWeight.w500,
               fontSize: 18,
@@ -114,10 +115,10 @@ class _ChatPageState extends State<ChatPage> {
       stream: _chatService.getMessages(widget.receiverID, senderID),
       builder: (context, snapshot) {
         if (snapshot.hasError) {
-          return Text("Error");
+          return const Text("Error");
         }
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return Text("Loading...");
+          return const Text("Loading...");
         }
         return ListView.builder(
           controller: _scrollController,
@@ -161,6 +162,8 @@ class _ChatPageState extends State<ChatPage> {
       timeString = DateFormat('MMM d').format(messageDateTime);
     }
 
+
+
     return GestureDetector(
       onLongPress: () {
         _messageController.text = '${data["message"]} ';
@@ -172,7 +175,7 @@ class _ChatPageState extends State<ChatPage> {
             : CrossAxisAlignment.start,
         children: [
           AnimatedContainer(
-            duration: Duration(milliseconds: 500),
+            duration: const Duration(milliseconds: 500),
             transform: lastClickedIndex == index
                 ? Matrix4.translationValues(0, -5, 0)
                 : Matrix4.translationValues(0, 0, 0),
