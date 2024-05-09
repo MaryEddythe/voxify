@@ -14,6 +14,23 @@ class MyDrawer extends StatefulWidget {
 
 class _MyDrawerState extends State<MyDrawer> {
   bool _isHovered = false;
+  String? _currentUserEmail;
+  String? _userAvatarUrl = 'assets/wala.jpg'; // Default avatar image URL
+
+  @override
+  void initState() {
+    super.initState();
+    _getCurrentUserData();
+  }
+
+  void _getCurrentUserData() async {
+    final authService = AuthService();
+    final currentUser = await authService.getCurrentUser();
+    setState(() {
+      _currentUserEmail = currentUser?.email;
+      _userAvatarUrl = currentUser?.avatarUrl ?? _userAvatarUrl; // Update avatar URL if available
+    });
+  }
 
   void logout() {
     final _auth = AuthService();
@@ -29,13 +46,29 @@ class _MyDrawerState extends State<MyDrawer> {
         children: [
           Column(
             children: [
-              DrawerHeader(
-                child: Center(
-                  child: Icon(
-                    Icons.message,
-                    color: Theme.of(context).colorScheme.primary,
-                    size: 40,
-                  ),
+              // Custom Drawer Header
+              Container(
+                padding: EdgeInsets.all(16.0),
+                child: Column(
+                  children: [
+                    CircleAvatar(
+                      radius: 70,
+                      backgroundColor: Theme.of(context).colorScheme.tertiary,
+                      backgroundImage: AssetImage(_userAvatarUrl!), // Use dynamic image URL
+                    ),
+                    SizedBox(height: 10),
+                    // Display current user's email address
+                    Text(
+                      _currentUserEmail ?? 'Loading...',
+                      style: GoogleFonts.poppins(
+                        textStyle: TextStyle(
+                          color: Theme.of(context).colorScheme.inversePrimary,
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 8), // Add some space
+                    Divider(), // Add a divider
+                  ],
                 ),
               ),
               Padding(
@@ -49,7 +82,7 @@ class _MyDrawerState extends State<MyDrawer> {
                       ),
                     ),
                   ),
-                  leading: const Icon(Icons.home),
+                  leading: Icon(Icons.home),
                   onTap: () {
                     Navigator.pop(context);
                   },
@@ -69,7 +102,7 @@ class _MyDrawerState extends State<MyDrawer> {
                         ),
                       ),
                     ),
-                    leading: const Icon(Icons.settings),
+                    leading: Icon(Icons.settings),
                     onTap: () {
                       Navigator.pop(context);
                       Navigator.push(
@@ -96,7 +129,7 @@ class _MyDrawerState extends State<MyDrawer> {
                         ),
                       ),
                     ),
-                    leading: const Icon(Icons.settings),
+                    leading: Icon(Icons.info),
                     onTap: () {
                       Navigator.pop(context);
                       Navigator.push(
@@ -123,7 +156,7 @@ class _MyDrawerState extends State<MyDrawer> {
                         ),
                       ),
                     ),
-                    leading: const Icon(Icons.settings),
+                    leading: Icon(Icons.developer_mode),
                     onTap: () {
                       Navigator.pop(context);
                       Navigator.push(
@@ -149,7 +182,7 @@ class _MyDrawerState extends State<MyDrawer> {
                   ),
                 ),
               ),
-              leading: const Icon(Icons.logout),
+              leading: Icon(Icons.logout),
               onTap: logout,
             ),
           ),

@@ -1,12 +1,11 @@
-// chatpage.dart
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:verbalize/backend/chat_bubble.dart';
 import 'package:verbalize/backend/textfield.dart';
 import 'package:verbalize/services/auth/authservice.dart';
 import 'package:verbalize/services/chat/chat.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 class ChatPage extends StatefulWidget {
   final String receiverEmail;
@@ -29,6 +28,7 @@ class _ChatPageState extends State<ChatPage> {
   FocusNode myFocusNode = FocusNode();
   final ScrollController _scrollController = ScrollController();
   int lastClickedIndex = -1;
+  late AppUser _currentUser;
 
   @override
   void initState() {
@@ -48,6 +48,10 @@ class _ChatPageState extends State<ChatPage> {
     myFocusNode.dispose();
     _messageController.dispose();
     super.dispose();
+  }
+
+  Future<void> _initializeCurrentUser() async {
+    _currentUser = (await _authService.getCurrentUser())!;
   }
 
   void sendMessage() async {
@@ -70,10 +74,8 @@ class _ChatPageState extends State<ChatPage> {
   void handleChatBubbleClick(int index) {
     setState(() {
       if (lastClickedIndex == index) {
-        // If the clicked message is the same as the last clicked one, reset lastClickedIndex
         lastClickedIndex = -1;
       } else {
-        // Otherwise, set lastClickedIndex to the clicked index
         lastClickedIndex = index;
       }
     });
@@ -98,19 +100,33 @@ class _ChatPageState extends State<ChatPage> {
         backgroundColor: Colors.transparent,
         elevation: 0,
       ),
-      body: Column(
-        children: [
-          Expanded(
-            child: _buildMessageList(),
-          ),
-          _buildUserInput(),
-        ],
+      body: FutureBuilder<void>(
+        future: _initializeCurrentUser(),
+        builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(
+              child: CircularProgressIndicator(), // Display loading indicator until _currentUser is initialized
+            );
+          }
+          return Column(
+            children: [
+              Expanded(
+                child: _buildMessageList(),
+              ),
+              _buildUserInput(),
+            ],
+          );
+        },
       ),
     );
   }
 
   Widget _buildMessageList() {
-    String senderID = _authService.getCurrentUser()!.uid;
+    if (_currentUser == null) {
+      return const SizedBox(); // Return an empty widget if _currentUser is null
+    }
+
+    String senderID = _currentUser.uid;
     return StreamBuilder(
       stream: _chatService.getMessages(widget.receiverID, senderID),
       builder: (context, snapshot) {
@@ -132,36 +148,19 @@ class _ChatPageState extends State<ChatPage> {
     );
   }
 
-  // Inside _buildMessageItem method
   Widget _buildMessageItem(DocumentSnapshot doc, int index, int totalCount) {
     Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
-    bool isCurrentUser = data['senderID'] == _authService.getCurrentUser()!.uid;
-
-    // Parse the timestamp from the data
+    bool isCurrentUser = data['senderID'] == _currentUser.uid;
     Timestamp timestamp = data['timestamp'] ?? Timestamp.now();
     DateTime messageDateTime = timestamp.toDate();
-
-    // Get the current time
     DateTime now = DateTime.now();
-
-    // Calculate the difference in days
     int differenceInDays = now.difference(messageDateTime).inDays;
-
-    // Format the time based on the 12-hour clock format
     String timeString = DateFormat.jm().format(messageDateTime);
-
-    // Check if this is the last message or if it matches the last clicked index
-    bool shouldShowTime = index == totalCount - 1 || index == lastClickedIndex;
-
-    // Check if the message was sent more than 24 hours ago
     if (differenceInDays > 1) {
-      // Show the day of the week if the message was sent more than 24 hours ago
       timeString = DateFormat('EEEE').format(messageDateTime);
     } else if (differenceInDays > 7) {
-      // Show the month and date if the message was sent more than 7 days ago
       timeString = DateFormat('MMM d').format(messageDateTime);
     }
-
     return GestureDetector(
       onLongPress: () {
         _messageController.text = '${data["message"]} ';
@@ -180,7 +179,7 @@ class _ChatPageState extends State<ChatPage> {
             child: ChatBubble(
                 message: data["message"], isCurrentUser: isCurrentUser),
           ),
-          if (shouldShowTime)
+          if (index == totalCount - 1 || index == lastClickedIndex)
             Text(
               timeString,
               style: const TextStyle(
@@ -203,7 +202,7 @@ class _ChatPageState extends State<ChatPage> {
               // Add your logic to handle emoji button press
             },
             icon: const Icon(
-              Icons.image, // Use any emoji icon you prefer
+              Icons.image,
               color: Color(0xff5072A7),
             ),
           ),
@@ -215,16 +214,9 @@ class _ChatPageState extends State<ChatPage> {
                   hintText: "Type a message",
                   obscureText: false,
                   focusNode: myFocusNode,
-                  // suffix: IconButton(
-                  //   onPressed: () {}, // Placeholder onPressed function
-                  //   icon: Icon(
-                  //     Icons.send,
-                  //     color: Theme.of(context).primaryColor,
-                  //   ),
-                  // ),
                 ),
                 Positioned(
-                  right: 40, // Adjust this value as needed to move the button more to the left
+                  right: 40,
                   bottom: 7,
                   child: Container(
                     decoration: const BoxDecoration(

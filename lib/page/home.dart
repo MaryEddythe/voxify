@@ -17,22 +17,33 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final ChatService _chatService = ChatService();
   final AuthService _authService = AuthService();
+  late AppUser _currentUser;
   late List<Map<String, dynamic>> _users;
   late List<Map<String, dynamic>> _filteredUsers = [];
 
   @override
   void initState() {
     super.initState();
+    _initializeCurrentUser();
     _initializeUsers();
   }
 
-  void _initializeUsers() {
-    _chatService.getUsersStream().listen((users) {
-      setState(() {
-        _users = List.from(users);
-        _filteredUsers = List.from(users);
+  void _initializeCurrentUser() async {
+    _currentUser = (await _authService.getCurrentUser()) ?? AppUser(uid: '', email: '', avatarUrl: ''); // Set a default value if getCurrentUser() returns null
+  }
+
+  void _initializeUsers() async {
+    // Await the completion of getCurrentUser method
+    final AppUser? currentUser = await _authService.getCurrentUser();
+    if (currentUser != null) {
+      final currentUserUid = currentUser.uid;
+      _chatService.getUsersStream().listen((users) {
+        setState(() {
+          _users = List.from(users);
+          _filteredUsers = List.from(users);
+        });
       });
-    });
+    }
   }
 
   void _searchUser(String query) {
@@ -125,10 +136,10 @@ class _HomePageState extends State<HomePage> {
 
   Widget _buildUserListItem(
       Map<String, dynamic> userData, BuildContext context) {
-    if (userData["email"] != _authService.getCurrentUser()!.email) {
+    if (userData["email"] != _currentUser.email) {
       return StreamBuilder(
         stream: _chatService.getMessages(
-            _authService.getCurrentUser()!.uid, userData["uid"]),
+            _currentUser.uid, userData["uid"]),
         builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return CircularProgressIndicator();
