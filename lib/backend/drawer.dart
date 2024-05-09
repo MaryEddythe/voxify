@@ -44,132 +44,135 @@ class _MyDrawerState extends State<MyDrawer> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Column(
-            children: [
-              // Custom Drawer Header
-              Container(
-                padding: EdgeInsets.all(16.0),
-                child: Column(
-                  children: [
-                    CircleAvatar(
-                      radius: 70,
-                      backgroundColor: Theme.of(context).colorScheme.tertiary,
-                      backgroundImage: AssetImage(_userAvatarUrl!), // Use dynamic image URL
-                    ),
-                    SizedBox(height: 10),
-                    // Display current user's email address
-                    Text(
-                      _currentUserEmail ?? 'Loading...',
-                      style: GoogleFonts.poppins(
-                        textStyle: TextStyle(
-                          color: Theme.of(context).colorScheme.inversePrimary,
+          Padding(
+            padding: const EdgeInsets.only(top: 40.0), // Adjust top padding here
+            child: Column(
+              children: [
+                // Custom Drawer Header
+                Container(
+                  padding: EdgeInsets.all(16.0),
+                  child: Column(
+                    children: [
+                      CircleAvatar(
+                        radius: 70,
+                        backgroundColor: Theme.of(context).colorScheme.tertiary,
+                        backgroundImage: AssetImage(_userAvatarUrl!), // Use dynamic image URL
+                      ),
+                      SizedBox(height: 10),
+                      // Display current user's email address
+                      Text(
+                        _currentUserEmail ?? 'Loading...',
+                        style: GoogleFonts.poppins(
+                          textStyle: TextStyle(
+                            color: Theme.of(context).colorScheme.inversePrimary,
+                          ),
                         ),
                       ),
-                    ),
-                    SizedBox(height: 8), // Add some space
-                    Divider(), // Add a divider
-                  ],
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 15.0),
-                child: ListTile(
-                  title: Text(
-                    "HOME",
-                    style: GoogleFonts.poppins(
-                      textStyle: TextStyle(
-                        color: Theme.of(context).colorScheme.inversePrimary,
-                      ),
-                    ),
+                      SizedBox(height: 8), // Add some space
+                      Divider(), // Add a divider
+                    ],
                   ),
-                  leading: Icon(Icons.home),
-                  onTap: () {
-                    Navigator.pop(context);
-                  },
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 15.0),
-                child: MouseRegion(
-                  onEnter: (_) => setState(() => _isHovered = true),
-                  onExit: (_) => setState(() => _isHovered = false),
+                Padding(
+                  padding: const EdgeInsets.only(left: 15.0),
                   child: ListTile(
                     title: Text(
-                      "THEMES",
+                      "HOME",
                       style: GoogleFonts.poppins(
                         textStyle: TextStyle(
                           color: Theme.of(context).colorScheme.inversePrimary,
                         ),
                       ),
                     ),
-                    leading: Icon(Icons.settings),
+                    leading: Icon(Icons.home),
                     onTap: () {
                       Navigator.pop(context);
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const SettingsPage(),
-                        ),
-                      );
                     },
                   ),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 15.0),
-                child: MouseRegion(
-                  onEnter: (_) => setState(() => _isHovered = true),
-                  onExit: (_) => setState(() => _isHovered = false),
-                  child: ListTile(
-                    title: Text(
-                      "ABOUT US",
-                      style: GoogleFonts.poppins(
-                        textStyle: TextStyle(
-                          color: Theme.of(context).colorScheme.inversePrimary,
+                Padding(
+                  padding: const EdgeInsets.only(left: 15.0),
+                  child: MouseRegion(
+                    onEnter: (_) => setState(() => _isHovered = true),
+                    onExit: (_) => setState(() => _isHovered = false),
+                    child: ListTile(
+                      title: Text(
+                        "THEMES",
+                        style: GoogleFonts.poppins(
+                          textStyle: TextStyle(
+                            color: Theme.of(context).colorScheme.inversePrimary,
+                          ),
                         ),
                       ),
+                      leading: Icon(Icons.settings),
+                      onTap: () {
+                        Navigator.pop(context);
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const SettingsPage(),
+                          ),
+                        );
+                      },
                     ),
-                    leading: Icon(Icons.info),
-                    onTap: () {
-                      Navigator.pop(context);
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const AboutPage(),
-                        ),
-                      );
-                    },
                   ),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 15.0),
-                child: MouseRegion(
-                  onEnter: (_) => setState(() => _isHovered = true),
-                  onExit: (_) => setState(() => _isHovered = false),
-                  child: ListTile(
-                    title: Text(
-                      "DEVELOPERS",
-                      style: GoogleFonts.poppins(
-                        textStyle: TextStyle(
-                          color: Theme.of(context).colorScheme.inversePrimary,
+                Padding(
+                  padding: const EdgeInsets.only(left: 15.0),
+                  child: MouseRegion(
+                    onEnter: (_) => setState(() => _isHovered = true),
+                    onExit: (_) => setState(() => _isHovered = false),
+                    child: ListTile(
+                      title: Text(
+                        "ABOUT US",
+                        style: GoogleFonts.poppins(
+                          textStyle: TextStyle(
+                            color: Theme.of(context).colorScheme.inversePrimary,
+                          ),
                         ),
                       ),
+                      leading: Icon(Icons.info),
+                      onTap: () {
+                        Navigator.pop(context);
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const AboutPage(),
+                          ),
+                        );
+                      },
                     ),
-                    leading: Icon(Icons.developer_mode),
-                    onTap: () {
-                      Navigator.pop(context);
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const Developers(),
-                        ),
-                      );
-                    },
                   ),
                 ),
-              ),
-            ],
+                Padding(
+                  padding: const EdgeInsets.only(left: 15.0),
+                  child: MouseRegion(
+                    onEnter: (_) => setState(() => _isHovered = true),
+                    onExit: (_) => setState(() => _isHovered = false),
+                    child: ListTile(
+                      title: Text(
+                        "DEVELOPERS",
+                        style: GoogleFonts.poppins(
+                          textStyle: TextStyle(
+                            color: Theme.of(context).colorScheme.inversePrimary,
+                          ),
+                        ),
+                      ),
+                      leading: Icon(Icons.developer_mode),
+                      onTap: () {
+                        Navigator.pop(context);
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const Developers(),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
           Padding(
             padding: const EdgeInsets.only(left: 15.0, bottom: 25.0),

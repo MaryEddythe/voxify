@@ -26,7 +26,7 @@ class AuthService {
         return AppUser(
           uid: firebaseUser.uid,
           email: firebaseUser.email!,
-          avatarUrl: userDoc.data()?['avatarUrl'] ?? 'assets/dev3.jpg',
+          avatarUrl: userDoc.data()?['avatarUrl'] ?? 'assets/wala.jpg',
         );
       }
     }
