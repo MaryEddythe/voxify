@@ -31,8 +31,8 @@ class _AboutPageState extends State
         title: Text(
           "About Us",
           style: GoogleFonts.lexend(
-            textStyle: const TextStyle(
-              color: Colors.black,
+            textStyle: TextStyle(
+              color: Theme.of(context).colorScheme.inversePrimary,
               fontWeight: FontWeight.w700,
             ),
           ),

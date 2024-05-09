@@ -2,11 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:verbalize/backend/drawer.dart';
 import 'package:verbalize/backend/usertile.dart';
-import 'package:verbalize/page/chatpage.dart';
+import 'package:verbalize/page/chatpage.dart'; // Import the ChatPage
 import 'package:verbalize/services/auth/authservice.dart';
 import 'package:verbalize/services/chat/chat.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-
 
 class HomePage extends StatefulWidget {
   HomePage({Key? key});
@@ -54,11 +53,9 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
         title: Text(
           "Chats",
-          style: GoogleFonts.poppins(
-            textStyle: const TextStyle(
-              color: Colors.black,
-              fontWeight: FontWeight.w700,
-            ),
+          style: GoogleFonts.poppins().copyWith(
+            color: Theme.of(context).colorScheme.inversePrimary,
+            fontWeight: FontWeight.w900,
           ),
         ),
         centerTitle: true,
@@ -81,7 +78,7 @@ class _HomePageState extends State<HomePage> {
                       borderRadius: BorderRadius.circular(5),
                       color: Theme.of(context).colorScheme.secondary,
                     ),
-                    child: Icon(Icons.search, color: Colors.black),
+                    child: Icon(Icons.search, color: Theme.of(context).colorScheme.inversePrimary),
                   ),
                   Expanded(
                     child: Container(
@@ -92,8 +89,14 @@ class _HomePageState extends State<HomePage> {
                       ),
                       child: TextField(
                         onChanged: _searchUser,
+                        style: GoogleFonts.poppins(
+                          color: Theme.of(context).colorScheme.inversePrimary,
+                        ),
                         decoration: InputDecoration(
                           hintText: "Search",
+                          hintStyle: GoogleFonts.poppins(
+                            color: Colors.grey,
+                          ),
                           border: InputBorder.none,
                           contentPadding: EdgeInsets.only(left: 16),
                         ),
@@ -120,61 +123,67 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
- Widget _buildUserListItem(Map<String, dynamic> userData, BuildContext context) {
-  if (userData["email"] != _authService.getCurrentUser()!.email) {
-    return StreamBuilder(
-      stream: _chatService.getMessages(_authService.getCurrentUser()!.uid, userData["uid"]), // Fetch the messages stream
-      builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return CircularProgressIndicator(); // Show loading indicator while fetching data
-        } else {
-          if (snapshot.hasError) {
-            return Text('Error: ${snapshot.error}');
+  Widget _buildUserListItem(
+      Map<String, dynamic> userData, BuildContext context) {
+    if (userData["email"] != _authService.getCurrentUser()!.email) {
+      return StreamBuilder(
+        stream: _chatService.getMessages(
+            _authService.getCurrentUser()!.uid, userData["uid"]),
+        builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return CircularProgressIndicator();
           } else {
-            final lastMessage = snapshot.data!.docs.isNotEmpty ? snapshot.data!.docs.last['message'] : ''; // Get the last message from the snapshot
-            final sender = snapshot.data!.docs.isNotEmpty ? snapshot.data!.docs.last['senderEmail'] : ''; // Get the sender's email from the last message
-            return Dismissible(
-              key: Key(userData["uid"]),
-              direction: DismissDirection.endToStart,
-              background: Container(
-                alignment: Alignment.centerRight,
-                color: Colors.red,
-                child: Padding(
-                  padding: const EdgeInsets.only(right: 16.0),
-                  child: Icon(
-                    Icons.delete,
-                    color: Colors.black,
+            if (snapshot.hasError) {
+              return Text('Error: ${snapshot.error}');
+            } else {
+              final lastMessage = snapshot.data!.docs.isNotEmpty
+                  ? snapshot.data!.docs.last['message']
+                  : '';
+              final lastSenderEmail = snapshot.data!.docs.isNotEmpty
+                  ? snapshot.data!.docs.last['senderEmail']
+                  : '';
+              return Dismissible(
+                key: Key(userData["uid"]),
+                direction: DismissDirection.endToStart,
+                background: Container(
+                  alignment: Alignment.centerRight,
+                  color: Colors.red,
+                  child: const Padding(
+                    padding: EdgeInsets.only(right: 16.0),
+                    child: Icon(
+                      Icons.delete,
+                      color: Colors.white,
+                    ),
                   ),
                 ),
-              ),
-              onDismissed: (direction) {
-                setState(() {
-                  _filteredUsers.remove(userData);
-                });
-              },
-              child: UserTile(
-                text: userData["email"],
-                lastMessage: lastMessage,
-                sender: sender, // Pass the sender's information
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => ChatPage(
-                        receiverEmail: userData["email"],
-                        receiverID: userData["uid"],
-                      ),
-                    ),
-                  );
+                onDismissed: (direction) {
+                  setState(() {
+                    _filteredUsers.remove(userData);
+                  });
                 },
-              ),
-            );
+                child: UserTile(
+                  text: userData["email"],
+                  lastMessage: lastMessage,
+                  sender: lastSenderEmail,
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ChatPage(
+                          receiverEmail: userData["email"],
+                          receiverID: userData["uid"],
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              );
+            }
           }
-        }
-      },
-    );
-  } else {
-    return Container();
+        },
+      );
+    } else {
+      return Container();
+    }
   }
-}
 }

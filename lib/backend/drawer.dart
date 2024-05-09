@@ -13,11 +13,9 @@ class MyDrawer extends StatefulWidget {
 }
 
 class _MyDrawerState extends State<MyDrawer> {
-  // ignore: unused_field
   bool _isHovered = false;
 
   void logout() {
-    // Get auth service
     final _auth = AuthService();
     _auth.signOut();
   }
@@ -31,7 +29,6 @@ class _MyDrawerState extends State<MyDrawer> {
         children: [
           Column(
             children: [
-              // Logo
               DrawerHeader(
                 child: Center(
                   child: Icon(
@@ -41,27 +38,23 @@ class _MyDrawerState extends State<MyDrawer> {
                   ),
                 ),
               ),
-
-              // List tiles
               Padding(
                 padding: const EdgeInsets.only(left: 15.0),
                 child: ListTile(
                   title: Text(
                     "HOME",
                     style: GoogleFonts.poppins(
-                      textStyle: const TextStyle(
-                        color: Colors.black,
+                      textStyle: TextStyle(
+                        color: Theme.of(context).colorScheme.inversePrimary,
                       ),
                     ),
                   ),
                   leading: const Icon(Icons.home),
                   onTap: () {
-                    // Pop drawer
                     Navigator.pop(context);
                   },
                 ),
               ),
-
               Padding(
                 padding: const EdgeInsets.only(left: 15.0),
                 child: MouseRegion(
@@ -72,16 +65,13 @@ class _MyDrawerState extends State<MyDrawer> {
                       "THEMES",
                       style: GoogleFonts.poppins(
                         textStyle: TextStyle(
-                          color: Colors.black,
+                          color: Theme.of(context).colorScheme.inversePrimary,
                         ),
                       ),
                     ),
                     leading: const Icon(Icons.settings),
                     onTap: () {
-                      // Pop drawer
                       Navigator.pop(context);
-
-                      // Go to settings page
                       Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -92,7 +82,6 @@ class _MyDrawerState extends State<MyDrawer> {
                   ),
                 ),
               ),
-
               Padding(
                 padding: const EdgeInsets.only(left: 15.0),
                 child: MouseRegion(
@@ -103,16 +92,13 @@ class _MyDrawerState extends State<MyDrawer> {
                       "ABOUT US",
                       style: GoogleFonts.poppins(
                         textStyle: TextStyle(
-                          color: Colors.black,
+                          color: Theme.of(context).colorScheme.inversePrimary,
                         ),
                       ),
                     ),
                     leading: const Icon(Icons.settings),
                     onTap: () {
-                      // Pop drawer
                       Navigator.pop(context);
-
-                      // Go to about page
                       Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -123,7 +109,6 @@ class _MyDrawerState extends State<MyDrawer> {
                   ),
                 ),
               ),
-
               Padding(
                 padding: const EdgeInsets.only(left: 15.0),
                 child: MouseRegion(
@@ -134,16 +119,13 @@ class _MyDrawerState extends State<MyDrawer> {
                       "DEVELOPERS",
                       style: GoogleFonts.poppins(
                         textStyle: TextStyle(
-                          color: Colors.black,
+                          color: Theme.of(context).colorScheme.inversePrimary,
                         ),
                       ),
                     ),
                     leading: const Icon(Icons.settings),
                     onTap: () {
-                      // Pop drawer
                       Navigator.pop(context);
-
-                      // Go to about page
                       Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -156,16 +138,14 @@ class _MyDrawerState extends State<MyDrawer> {
               ),
             ],
           ),
-
-          // Logout ListTile
           Padding(
             padding: const EdgeInsets.only(left: 15.0, bottom: 25.0),
             child: ListTile(
               title: Text(
                 "LOGOUT",
                 style: GoogleFonts.poppins(
-                  textStyle: const TextStyle(
-                    color: Colors.black,
+                  textStyle: TextStyle(
+                    color: Theme.of(context).colorScheme.inversePrimary,
                   ),
                 ),
               ),

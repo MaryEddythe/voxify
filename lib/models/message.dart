@@ -4,6 +4,7 @@ class Message {
   final String senderID;
   final String senderEmail;
   final String receiverID;
+  final String receiverEmail; // Add receiverEmail here
   final String message;
   final Timestamp timestamp;
 
@@ -11,16 +12,18 @@ class Message {
     required this.senderID,
     required this.senderEmail,
     required this.receiverID,
+    required this.receiverEmail,
     required this.message,
     required this.timestamp,
   });
 
   //convert to map//
-  Map<String, dynamic> toMap () {
-    return{
+  Map<String, dynamic> toMap() {
+    return {
       'senderID': senderID,
-      'senderEmail': receiverID,
+      'senderEmail': senderEmail, // Fix: Change receiverID to senderEmail
       'receiverID': receiverID,
+      'receiverEmail': receiverEmail, // Add receiverEmail here
       'message': message,
       'timestamp': timestamp,
     };

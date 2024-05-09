@@ -15,8 +15,8 @@ class SettingsPage extends StatelessWidget {
         title: Text(
           "Themes",
           style: GoogleFonts.poppins(
-            textStyle: const TextStyle(
-              color: Color.fromARGB(255, 69, 67, 67),
+            textStyle:  TextStyle(
+              color: Theme.of(context).colorScheme.inversePrimary,
               fontWeight: FontWeight.w500,
             ),
           ),

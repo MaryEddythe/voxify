@@ -4,14 +4,14 @@ import 'package:google_fonts/google_fonts.dart';
 class UserTile extends StatefulWidget {
   final String text;
   final String lastMessage;
-  final String sender; // New property to hold the sender's information
+  final String sender;
   final void Function()? onTap;
 
   const UserTile({
     Key? key,
     required this.text,
     required this.lastMessage,
-    required this.sender, // Include sender information in the constructor
+    required this.sender,
     required this.onTap,
   }) : super(key: key);
 
@@ -49,24 +49,23 @@ class _UserTileState extends State<UserTile> {
                     widget.text,
                     style: GoogleFonts.poppins(
                       textStyle: TextStyle(
-                        color: _isHovered ? Colors.white : Colors.black,
+                        color: _isHovered ? Colors.white : Theme.of(context).colorScheme.inversePrimary,
                       ),
                     ),
                   ),
                 ],
               ),
-             SizedBox(height: 5), // Add some space between email and last message
-if (widget.lastMessage.isNotEmpty) // Conditionally render last message
-  Text(
-    '${widget.text}: ${widget.lastMessage}',
-    style: GoogleFonts.poppins(
-      textStyle: TextStyle(
-        color: _isHovered ? Colors.white : const Color.fromARGB(255, 111, 105, 105),
-        fontSize: 13, // Adjust the font size as needed
-      ),
-    ),
-  ),
-
+              SizedBox(height: 5), 
+              if (widget.lastMessage.isNotEmpty) 
+                Text(
+                  '${widget.text}: ${widget.lastMessage}',
+                  style: GoogleFonts.poppins(
+                    textStyle: TextStyle(
+                      color: _isHovered ? Colors.white : const Color.fromARGB(255, 111, 105, 105),
+                      fontSize: 13,
+                    ),
+                  ),
+                ),
             ],
           ),
         ),

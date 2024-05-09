@@ -64,7 +64,7 @@ class Developers extends StatelessWidget {
                     ),
                     const SizedBox(height: 5), // Added spacing between name and text
                     Text(
-                      'Frontend Developer',
+                      'BSIT-3B',
                       style: GoogleFonts.poppins(
                         textStyle: TextStyle(
                           color: primaryColor,
@@ -109,7 +109,7 @@ class Developers extends StatelessWidget {
                     ),
                     const SizedBox(height: 5), // Added spacing between name and text
                     Text(
-                      'Backend Developer',
+                      'BSIT-3B',
                       style: GoogleFonts.poppins(
                         textStyle: TextStyle(
                           color: primaryColor,

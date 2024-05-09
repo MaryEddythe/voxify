@@ -1,9 +1,9 @@
+// chatpage.dart
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:verbalize/backend/chat_bubble.dart';
 import 'package:verbalize/backend/textfield.dart';
-import 'package:verbalize/models/message.dart';
 import 'package:verbalize/services/auth/authservice.dart';
 import 'package:verbalize/services/chat/chat.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -53,7 +53,7 @@ class _ChatPageState extends State<ChatPage> {
   void sendMessage() async {
     if (_messageController.text.isNotEmpty) {
       await _chatService.sendMessage(
-          widget.receiverID, _messageController.text);
+          widget.receiverID, widget.receiverEmail, _messageController.text);
       _messageController.clear();
     }
     scrollDown();
@@ -162,8 +162,6 @@ class _ChatPageState extends State<ChatPage> {
       timeString = DateFormat('MMM d').format(messageDateTime);
     }
 
-
-
     return GestureDetector(
       onLongPress: () {
         _messageController.text = '${data["message"]} ';
@@ -217,13 +215,13 @@ class _ChatPageState extends State<ChatPage> {
                   hintText: "Type a message",
                   obscureText: false,
                   focusNode: myFocusNode,
-                  suffix: IconButton(
-                    onPressed: () {}, // Placeholder onPressed function
-                    icon: Icon(
-                      Icons.send,
-                      color: Theme.of(context).primaryColor,
-                    ),
-                  ),
+                  // suffix: IconButton(
+                  //   onPressed: () {}, // Placeholder onPressed function
+                  //   icon: Icon(
+                  //     Icons.send,
+                  //     color: Theme.of(context).primaryColor,
+                  //   ),
+                  // ),
                 ),
                 Positioned(
                   right: 40, // Adjust this value as needed to move the button more to the left
