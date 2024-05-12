@@ -6,7 +6,7 @@ class IntroPage2 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.deepPurple,
+      color: Color(0xFF5A9AC6),
     );
   }
 }
