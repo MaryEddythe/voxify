@@ -80,6 +80,10 @@ flutter:
     - assets/wallpaper.png
     - assets/wala.jpg
     - assets/gif.gif
+    - assets/Safe.gif
+    - assets/messa.gif
+    - assets/sms.gif
+    - assets/files.gif
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
