@@ -152,7 +152,9 @@ class _HomePageState extends State<HomePage> {
               final lastSenderEmail = snapshot.data!.docs.isNotEmpty
                   ? snapshot.data!.docs.last['senderEmail']
                   : '';
-              final combinedMessage = 'Last message: $lastMessage';
+              final combinedMessage = lastMessage.isNotEmpty
+                  ? 'Last message: $lastMessage'
+                  : '';
               return Dismissible(
                 key: Key(userData["uid"]),
                 direction: DismissDirection.endToStart,
