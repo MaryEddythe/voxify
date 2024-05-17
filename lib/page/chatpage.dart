@@ -197,15 +197,6 @@ class _ChatPageState extends State<ChatPage> {
       padding: const EdgeInsets.only(top: 10, bottom: 50.0, left: 15, right: 0),
       child: Row(
         children: [
-          IconButton(
-            onPressed: () {
-              // Add your logic to handle emoji button press
-            },
-            icon: const Icon(
-              Icons.image,
-              color: Color(0xff5072A7),
-            ),
-          ),
           Expanded(
             child: Stack(
               children: [
