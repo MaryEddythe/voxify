@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:verbalize/backend/drawer.dart';
 import 'package:verbalize/backend/usertile.dart';
-import 'package:verbalize/page/chatpage.dart'; // Import the ChatPage
+import 'package:verbalize/page/chatpage.dart'; 
 import 'package:verbalize/services/auth/authservice.dart';
 import 'package:verbalize/services/chat/chat.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -29,11 +29,10 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _initializeCurrentUser() async {
-    _currentUser = (await _authService.getCurrentUser()) ?? AppUser(uid: '', email: '', avatarUrl: ''); // Set a default value if getCurrentUser() returns null
+    _currentUser = (await _authService.getCurrentUser()) ?? AppUser(uid: '', email: '', avatarUrl: '');
   }
 
   void _initializeUsers() async {
-    // Await the completion of getCurrentUser method
     final AppUser? currentUser = await _authService.getCurrentUser();
     if (currentUser != null) {
       final currentUserUid = currentUser.uid;
@@ -153,6 +152,7 @@ class _HomePageState extends State<HomePage> {
               final lastSenderEmail = snapshot.data!.docs.isNotEmpty
                   ? snapshot.data!.docs.last['senderEmail']
                   : '';
+              final combinedMessage = 'Last message: $lastMessage';
               return Dismissible(
                 key: Key(userData["uid"]),
                 direction: DismissDirection.endToStart,
@@ -174,7 +174,7 @@ class _HomePageState extends State<HomePage> {
                 },
                 child: UserTile(
                   text: userData["email"],
-                  lastMessage: lastMessage,
+                  lastMessage: combinedMessage,
                   sender: lastSenderEmail,
                   onTap: () {
                     Navigator.push(

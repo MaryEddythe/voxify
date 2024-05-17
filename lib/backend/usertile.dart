@@ -55,10 +55,10 @@ class _UserTileState extends State<UserTile> {
                   ),
                 ],
               ),
-              SizedBox(height: 5), 
-              if (widget.lastMessage.isNotEmpty) 
+              SizedBox(height: 5),
+              if (widget.lastMessage.isNotEmpty)
                 Text(
-                  '${widget.text}: ${widget.lastMessage}',
+                  widget.lastMessage,
                   style: GoogleFonts.poppins(
                     textStyle: TextStyle(
                       color: _isHovered ? Colors.white : const Color.fromARGB(255, 111, 105, 105),
