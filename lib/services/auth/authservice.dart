@@ -17,6 +17,8 @@ class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
+  User? get currentUser => _auth.currentUser; // Add this getter
+
   Future<AppUser?> getCurrentUser() async {
     User? firebaseUser = _auth.currentUser;
     if (firebaseUser != null) {
@@ -33,14 +35,9 @@ class AuthService {
     return null;
   }
 
-  Future<UserCredential> signInWithEmailPassword(
-      String email, password) async {
+  Future<UserCredential> signInWithEmailPassword(String email, String password) async {
     try {
-      UserCredential userCredential =
-          await _auth.signInWithEmailAndPassword(
-        email: email,
-        password: password,
-      );
+      UserCredential userCredential = await _auth.signInWithEmailAndPassword(email: email, password: password);
 
       _firestore.collection("Users").doc(userCredential.user!.uid).set(
         {
@@ -55,11 +52,9 @@ class AuthService {
     }
   }
 
-  Future<UserCredential> signUpWithEmailAndPassword(
-      String email, password) async {
+  Future<UserCredential> signUpWithEmailAndPassword(String email, String password) async {
     try {
-      UserCredential userCredential = await _auth
-          .createUserWithEmailAndPassword(email: email, password: password);
+      UserCredential userCredential = await _auth.createUserWithEmailAndPassword(email: email, password: password);
 
       _firestore.collection("Users").doc(userCredential.user!.uid).set(
         {

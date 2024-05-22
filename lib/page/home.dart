@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:verbalize/backend/drawer.dart';
 import 'package:verbalize/backend/usertile.dart';
-import 'package:verbalize/page/chatpage.dart'; 
+import 'package:verbalize/page/chatpage.dart';
 import 'package:verbalize/services/auth/authservice.dart';
 import 'package:verbalize/services/chat/chat.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:intl/intl.dart'; // Import the intl package for formatting dates
+import 'package:intl/intl.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({Key? key});
@@ -15,18 +15,40 @@ class HomePage extends StatefulWidget {
   _HomePageState createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
   final ChatService _chatService = ChatService();
   final AuthService _authService = AuthService();
   late AppUser _currentUser;
   late List<Map<String, dynamic>> _users;
   late List<Map<String, dynamic>> _filteredUsers = [];
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
+    setStatus("Online");
     _initializeCurrentUser();
     _initializeUsers();
+  }
+
+  void setStatus(String status) async {
+    if (_authService.currentUser != null) {
+      await _firestore.collection('Users').doc(_authService.currentUser!.uid).update({
+        "status": status,
+      });
+    }
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      //online
+      setStatus("Online");
+    } else {
+      //offline
+      setStatus("Offline");
+    }
   }
 
   void _initializeCurrentUser() async {
@@ -138,8 +160,7 @@ class _HomePageState extends State<HomePage> {
       Map<String, dynamic> userData, BuildContext context) {
     if (userData["email"] != _currentUser.email) {
       return StreamBuilder(
-        stream: _chatService.getMessages(
-            _currentUser.uid, userData["uid"]),
+        stream: _chatService.getMessages(_currentUser.uid, userData["uid"]),
         builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return CircularProgressIndicator();

@@ -29,6 +29,7 @@ class _ChatPageState extends State<ChatPage> {
   final ScrollController _scrollController = ScrollController();
   int lastClickedIndex = -1;
   late AppUser _currentUser;
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   @override
   void initState() {
@@ -86,15 +87,56 @@ class _ChatPageState extends State<ChatPage> {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
       appBar: AppBar(
-        title: Text(
-          widget.receiverEmail,
-          style: GoogleFonts.poppins(
-            textStyle: const TextStyle(
-              color: Color.fromARGB(255, 69, 67, 67),
-              fontWeight: FontWeight.w500,
-              fontSize: 18,
-            ),
-          ),
+        title: StreamBuilder<DocumentSnapshot>(
+          stream: _firestore.collection("Users").doc(widget.receiverID).snapshots(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return Text(
+                widget.receiverEmail,
+                style: GoogleFonts.poppins(
+                  textStyle: const TextStyle(
+                    color: Color.fromARGB(255, 69, 67, 67),
+                    fontWeight: FontWeight.w500,
+                    fontSize: 18,
+                  ),
+                ),
+              );
+            }
+            if (snapshot.hasData && snapshot.data != null) {
+              final userDoc = snapshot.data!;
+              final status = userDoc['status'] ?? 'Offline';
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    widget.receiverEmail,
+                    style: GoogleFonts.poppins(
+                      textStyle: const TextStyle(
+                        color: Color.fromARGB(255, 69, 67, 67),
+                        fontWeight: FontWeight.w500,
+                        fontSize: 18,
+                      ),
+                    ),
+                  ),
+                  Text(
+                    status,
+                    style: const TextStyle(fontSize: 14, color: Colors.grey),
+                  ),
+                ],
+              );
+            } else {
+              return Text(
+                widget.receiverEmail,
+                style: GoogleFonts.poppins(
+                  textStyle: const TextStyle(
+                    color: Color.fromARGB(255, 69, 67, 67),
+                    fontWeight: FontWeight.w500,
+                    fontSize: 18,
+                  ),
+                ),
+              );
+            }
+          },
         ),
         foregroundColor: Colors.grey,
         backgroundColor: Colors.transparent,
