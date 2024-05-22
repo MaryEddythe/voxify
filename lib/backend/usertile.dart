@@ -53,6 +53,7 @@ class _UserTileState extends State<UserTile> {
                       style: GoogleFonts.poppins(
                         textStyle: TextStyle(
                           color: _isHovered ? Colors.white : Theme.of(context).colorScheme.inversePrimary,
+                          fontWeight: FontWeight.w600
                         ),
                       ),
                     ),

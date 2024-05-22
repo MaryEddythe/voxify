@@ -94,8 +94,8 @@ class _ChatPageState extends State<ChatPage> {
               return Text(
                 widget.receiverEmail,
                 style: GoogleFonts.poppins(
-                  textStyle: const TextStyle(
-                    color: Color.fromARGB(255, 69, 67, 67),
+                  textStyle: TextStyle(
+                    color: Theme.of(context).colorScheme.inversePrimary,
                     fontWeight: FontWeight.w500,
                     fontSize: 18,
                   ),
@@ -111,7 +111,7 @@ class _ChatPageState extends State<ChatPage> {
                   Text(
                     widget.receiverEmail,
                     style: GoogleFonts.poppins(
-                      textStyle: const TextStyle(
+                      textStyle: TextStyle(
                         color: Color.fromARGB(255, 69, 67, 67),
                         fontWeight: FontWeight.w500,
                         fontSize: 18,
@@ -120,7 +120,12 @@ class _ChatPageState extends State<ChatPage> {
                   ),
                   Text(
                     status,
-                    style: const TextStyle(fontSize: 14, color: Colors.grey),
+                    style: GoogleFonts.poppins(
+                      textStyle: TextStyle(
+                        fontSize: 14,
+                        color: Colors.grey,
+                      ),
+                    ),
                   ),
                 ],
               );
@@ -128,7 +133,7 @@ class _ChatPageState extends State<ChatPage> {
               return Text(
                 widget.receiverEmail,
                 style: GoogleFonts.poppins(
-                  textStyle: const TextStyle(
+                  textStyle: TextStyle(
                     color: Color.fromARGB(255, 69, 67, 67),
                     fontWeight: FontWeight.w500,
                     fontSize: 18,
