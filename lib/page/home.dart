@@ -6,6 +6,7 @@ import 'package:verbalize/page/chatpage.dart';
 import 'package:verbalize/services/auth/authservice.dart';
 import 'package:verbalize/services/chat/chat.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:intl/intl.dart'; // Import the intl package for formatting dates
 
 class HomePage extends StatefulWidget {
   HomePage({Key? key});
@@ -117,7 +118,7 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
           ),
-          SizedBox(height: 20),
+          const SizedBox(height: 20),
           Expanded(child: _buildUserList()),
         ],
       ),
@@ -152,6 +153,12 @@ class _HomePageState extends State<HomePage> {
               final lastSenderEmail = snapshot.data!.docs.isNotEmpty
                   ? snapshot.data!.docs.last['senderEmail']
                   : '';
+              final timestamp = snapshot.data!.docs.isNotEmpty
+                  ? snapshot.data!.docs.last['timestamp'] as Timestamp
+                  : null;
+              final time = timestamp != null
+                  ? DateFormat('hh:mm a').format(timestamp.toDate())
+                  : '';
               final combinedMessage = lastMessage.isNotEmpty
                   ? 'Last message: $lastMessage'
                   : '';
@@ -178,6 +185,7 @@ class _HomePageState extends State<HomePage> {
                   text: userData["email"],
                   lastMessage: combinedMessage,
                   sender: lastSenderEmail,
+                  time: time, // Pass the time to the UserTile
                   onTap: () {
                     Navigator.push(
                       context,

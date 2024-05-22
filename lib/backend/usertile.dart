@@ -5,6 +5,7 @@ class UserTile extends StatefulWidget {
   final String text;
   final String lastMessage;
   final String sender;
+  final String time; // Add the time parameter
   final void Function()? onTap;
 
   const UserTile({
@@ -12,6 +13,7 @@ class UserTile extends StatefulWidget {
     required this.text,
     required this.lastMessage,
     required this.sender,
+    required this.time, // Add the time parameter
     required this.onTap,
   }) : super(key: key);
 
@@ -45,17 +47,28 @@ class _UserTileState extends State<UserTile> {
                 children: [
                   const Icon(Icons.person),
                   const SizedBox(width: 20),
+                  Expanded(
+                    child: Text(
+                      widget.text,
+                      style: GoogleFonts.poppins(
+                        textStyle: TextStyle(
+                          color: _isHovered ? Colors.white : Theme.of(context).colorScheme.inversePrimary,
+                        ),
+                      ),
+                    ),
+                  ),
                   Text(
-                    widget.text,
+                    widget.time, // Display the time
                     style: GoogleFonts.poppins(
                       textStyle: TextStyle(
-                        color: _isHovered ? Colors.white : Theme.of(context).colorScheme.inversePrimary,
+                        color: _isHovered ? Colors.white : Colors.grey,
+                        fontSize: 12,
                       ),
                     ),
                   ),
                 ],
               ),
-              SizedBox(height: 5),
+              const SizedBox(height: 5),
               if (widget.lastMessage.isNotEmpty)
                 Text(
                   widget.lastMessage,
