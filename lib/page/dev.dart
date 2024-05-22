@@ -156,7 +156,7 @@ class Developers extends StatelessWidget {
                   child: Text(
                     'The developers in their third year of Bachelor of Science in Information Technology (BSIT) at West Visayas State University have dedicated themselves to specializing in Software Technologies. This particular application represents the culmination of their efforts, serving as the final project for their Mobile Application Development course. ',
                     textAlign: TextAlign.center,
-                    style: GoogleFonts.lato(
+                    style: GoogleFonts.poppins(
                       textStyle: TextStyle(
                         color: primaryColor,
                         fontSize: 12,
