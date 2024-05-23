@@ -208,6 +208,14 @@ class _ChatPageState extends State<ChatPage> {
     } else if (differenceInDays > 7) {
       timeString = DateFormat('MMM d').format(messageDateTime);
     }
+
+    // Check if the message is seen and mark it as seen if it's the receiver
+    bool seen = data['seen'] ?? false; // Ensure seen is a boolean
+    if (!isCurrentUser && !seen) {
+      String chatRoomID = ([widget.receiverID, _currentUser.uid]..sort()).join('_');
+      _chatService.markMessageAsSeen(chatRoomID, doc.id);
+    }
+
     return GestureDetector(
       onLongPress: () {
         _messageController.text = '${data["message"]} ';
@@ -227,12 +235,25 @@ class _ChatPageState extends State<ChatPage> {
                 message: data["message"], isCurrentUser: isCurrentUser),
           ),
           if (index == totalCount - 1 || index == lastClickedIndex)
-            Text(
-              timeString,
-              style: const TextStyle(
-                color: Colors.grey,
-                fontSize: 12,
-              ),
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  timeString,
+                  style: const TextStyle(
+                    color: Colors.grey,
+                    fontSize: 12,
+                  ),
+                ),
+                if (isCurrentUser && seen)
+                  Text(
+                    ' Seen',
+                    style: const TextStyle(
+                      color: Colors.grey,
+                      fontSize: 12,
+                    ),
+                  ),
+              ],
             ),
         ],
       ),
