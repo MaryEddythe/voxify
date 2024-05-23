@@ -7,7 +7,7 @@ class Developers extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final Color primaryColor = Theme.of(context).colorScheme.inversePrimary;
-    final Color textColor = Colors.black; // Define text color
+    final Color textColor = Colors.black; 
 
     return Scaffold(
       appBar: AppBar(
@@ -62,7 +62,7 @@ class Developers extends StatelessWidget {
                         ),
                       ),
                     ),
-                    const SizedBox(height: 5), // Added spacing between name and text
+                    const SizedBox(height: 5), 
                     Text(
                       'BSIT-3B',
                       style: GoogleFonts.poppins(
@@ -74,7 +74,7 @@ class Developers extends StatelessWidget {
                     ),
                   ],
                 ),
-                const SizedBox(width: 15), // Add spacing between the pictures
+                const SizedBox(width: 15), 
                 Column(
                   children: [
                     DecoratedBox(
@@ -107,7 +107,7 @@ class Developers extends StatelessWidget {
                         ),
                       ),
                     ),
-                    const SizedBox(height: 5), // Added spacing between name and text
+                    const SizedBox(height: 5), 
                     Text(
                       'BSIT-3B',
                       style: GoogleFonts.poppins(
@@ -144,13 +144,13 @@ class Developers extends StatelessWidget {
                     builder: (context, constraints) {
                       return Container(
                         width: constraints.maxWidth,
-                        height: 5, // Height of the rectangle
-                        color: Colors.blue, // Color of the rectangle
+                        height: 5, 
+                        color: Colors.blue, 
                       );
                     },
                   ),
                 ),
-                const SizedBox(height: 20), // Add spacing between the rectangle and the text
+                const SizedBox(height: 20), 
                 Container(
                   padding: EdgeInsets.all(16),
                   child: Text(

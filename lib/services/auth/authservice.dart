@@ -17,7 +17,7 @@ class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  User? get currentUser => _auth.currentUser; // Add this getter
+  User? get currentUser => _auth.currentUser; 
 
   Future<AppUser?> getCurrentUser() async {
     User? firebaseUser = _auth.currentUser;

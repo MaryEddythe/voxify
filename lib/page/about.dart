@@ -15,7 +15,6 @@ class _AboutPageState extends State
   @override
   void initState() {
     super.initState();
-    // Delaying the animation to start after the page is fully loaded
     Future.delayed(Duration(milliseconds: 700), () {
       setState(() {
         _fadeIn = true;
@@ -39,13 +38,13 @@ class _AboutPageState extends State
         ),
         backgroundColor: Colors.transparent,
         elevation: 0,
-        centerTitle: true, // Center the title
+        centerTitle: true, 
       ),
       body: Stack(
         children: [
           Positioned.fill(
             child: Container(
-              height: 200, // Adjust the height as needed
+              height: 200, 
               child: Image.asset(
                 'assets/wallpaper.png',
                 fit: BoxFit.cover,
@@ -54,7 +53,7 @@ class _AboutPageState extends State
           ),
           Positioned.fill(
             child: Container(
-              color: Colors.black.withOpacity(0.7), // Adjust opacity as needed
+              color: Colors.black.withOpacity(0.7), 
             ),
           ),
           AnimatedOpacity(
@@ -63,7 +62,7 @@ class _AboutPageState extends State
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                SizedBox(height: 1), // Added padding to lower the text
+                SizedBox(height: 1), 
                 Text(
                   'Welcome to Quippy!',
                   style: GoogleFonts.playfairDisplay(
@@ -72,7 +71,7 @@ class _AboutPageState extends State
                     fontWeight: FontWeight.w700,
                   ),
                 ),
-                SizedBox(height: 30), // Added padding to lower the text
+                SizedBox(height: 30), 
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: Text(
@@ -85,7 +84,7 @@ class _AboutPageState extends State
                     ),
                   ),
                 ),
-                SizedBox(height: 20), // Added padding to lower the text
+                SizedBox(height: 20), 
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: Text(

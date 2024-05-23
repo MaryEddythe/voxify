@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:verbalize/onboarding/intro_page1.dart';
 import 'package:verbalize/onboarding/intro_page2.dart';
 import 'package:verbalize/onboarding/intro_page3.dart';
-import 'package:verbalize/page/login.dart';
 import 'package:verbalize/services/auth/authgate.dart';
 
 class OnBoardingScreen extends StatefulWidget {
@@ -16,10 +14,8 @@ class OnBoardingScreen extends StatefulWidget {
 
 class _OnBoardingScreenState extends State<OnBoardingScreen> {
 
-  //controller pages where diin na ang user//
   PageController _controller = PageController();
 
-  //keep track if we are on the last page//
   bool onLastPage = false;
 
 
@@ -28,7 +24,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
     return Scaffold(
       body: Stack(
         children: [
-          //page view//
+
           PageView(
             controller: _controller,
             onPageChanged: (index) {
@@ -43,14 +39,14 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
         ],
       ),
 
-      //dot indicator//
+
       Container(
         alignment: Alignment(0, 0.75),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
 
-            //skip//
+
             GestureDetector(
               onTap: () {
                 _controller.nextPage(
@@ -66,10 +62,10 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                 ),
               ),
 
-            //dot indicator//
+
             SmoothPageIndicator(controller: _controller, count: 3),
 
-            //para sa next or done//
+
             onLastPage ?
             GestureDetector(
                 onTap: () {

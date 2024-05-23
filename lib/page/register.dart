@@ -19,7 +19,7 @@ class _RegisterState extends State<Register> {
   final TextEditingController _confirmPasswordController =
       TextEditingController();
 
-  bool _isObscure = true; // Track password visibility
+  bool _isObscure = true; 
 
   void _togglePasswordVisibility() {
     setState(() {
@@ -111,7 +111,7 @@ class _RegisterState extends State<Register> {
                 const SizedBox(height: 10),
                 MyTextField(
                   hintText: "Password",
-                  obscureText: _isObscure, // Ensure this is connected to _isObscure
+                  obscureText: _isObscure, 
                   controller: _passwordController,
                   suffix: IconButton(
                     icon: Icon(_isObscure ? Icons.visibility : Icons.visibility_off),
@@ -121,7 +121,7 @@ class _RegisterState extends State<Register> {
                 const SizedBox(height: 10),
                 MyTextField(
                   hintText: "Confirm Password",
-                  obscureText: _isObscure, // Ensure this is connected to _isObscure
+                  obscureText: _isObscure, 
                   controller: _confirmPasswordController,
                   suffix: IconButton(
                     icon: Icon(_isObscure ? Icons.visibility : Icons.visibility_off),

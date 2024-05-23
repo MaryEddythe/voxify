@@ -17,7 +17,7 @@ class _LoginState extends State<Login> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
-  bool _isObscure = true; // Track password visibility
+  bool _isObscure = true; 
 
   void _togglePasswordVisibility() {
     setState(() {
@@ -112,44 +112,8 @@ class _LoginState extends State<Login> {
                   text: "Login",
                   onTap: () => login(context),
                 ),
-                const SizedBox(height: 20), // Add space between the Login button and the text
-                // Row(
-                //   mainAxisAlignment: MainAxisAlignment.center,
-                //   children: [
-                //     Expanded(
-                //       child: Divider(
-                //         color: Theme.of(context).colorScheme.primary,
-                //       ),
-                //     ),
-              //       Padding(
-              //         padding: const EdgeInsets.symmetric(horizontal: 10),
-              //         child: Text(
-              //           "OR CONTINUE WITH",
-              //           style: GoogleFonts.lexend(
-              //             textStyle: TextStyle(
-              //               color: Theme.of(context).colorScheme.primary,
-              //               fontWeight: FontWeight.bold,
-              //             ),
-              //           ),
-              //         ),
-              //       ),
-              //       Expanded(
-              //         child: Divider(
-              //           color: Theme.of(context).colorScheme.primary,
-              //         ),
-              //       ),
-              //     ],
-              //   ),
-              //   const SizedBox(height: 10), // Add space between Register link and new button
-              //   ElevatedButton(
-              //     onPressed: () {
-              //       // Add functionality for the new button here
-              //     },
-              //     child: Text("Continue with Google"),
-              // ),
-              //SizedBox(height: 20,),
-              //const FacebookAuthentication(),
-                const SizedBox(height: 17), // Add space between the text and the Register link
+                const SizedBox(height: 20), 
+                const SizedBox(height: 17), 
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [

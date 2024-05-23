@@ -152,7 +152,7 @@ class _ChatPageState extends State<ChatPage> {
         builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(
-              child: CircularProgressIndicator(), // Display loading indicator until _currentUser is initialized
+              child: CircularProgressIndicator(), 
             );
           }
           return Column(
@@ -170,7 +170,7 @@ class _ChatPageState extends State<ChatPage> {
 
   Widget _buildMessageList() {
     if (_currentUser == null) {
-      return const SizedBox(); // Return an empty widget if _currentUser is null
+      return const SizedBox(); 
     }
 
     String senderID = _currentUser.uid;
@@ -209,8 +209,8 @@ class _ChatPageState extends State<ChatPage> {
       timeString = DateFormat('MMM d').format(messageDateTime);
     }
 
-    // Check if the message is seen and mark it as seen if it's the receiver
-    bool seen = data['seen'] ?? false; // Ensure seen is a boolean
+
+    bool seen = data['seen'] ?? false; 
     if (!isCurrentUser && !seen) {
       String chatRoomID = ([widget.receiverID, _currentUser.uid]..sort()).join('_');
       _chatService.markMessageAsSeen(chatRoomID, doc.id);

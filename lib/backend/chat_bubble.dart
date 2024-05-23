@@ -15,7 +15,6 @@ class ChatBubble extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Determine whether it's dark mode
     bool isDarkMode = Provider.of<ThemeProvider>(context, listen: false).isDarkMode;
 
     return Container(
@@ -29,7 +28,7 @@ class ChatBubble extends StatelessWidget {
       margin: const EdgeInsets.symmetric(vertical: 2.5, horizontal: 25),
       child: Text(
         message,
-        style: GoogleFonts.poppins( // Apply Google Font Poppins to the text style
+        style: GoogleFonts.poppins( 
           textStyle: TextStyle(
             color: isCurrentUser
                 ? Colors.white
