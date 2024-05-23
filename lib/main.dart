@@ -2,7 +2,6 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:verbalize/onboarding/onboarding_screen.dart';
-import 'package:verbalize/services/auth/authgate.dart';
 import 'package:verbalize/firebase_options.dart';
 import 'package:verbalize/themes/theme_provider.dart';
 

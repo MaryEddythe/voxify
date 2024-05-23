@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:verbalize/backend/drawer.dart';
+import 'package:verbalize/backend/notifservices.dart';
 import 'package:verbalize/backend/usertile.dart';
 import 'package:verbalize/page/chatpage.dart';
 import 'package:verbalize/services/auth/authservice.dart';
@@ -23,6 +24,8 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
   late List<Map<String, dynamic>> _filteredUsers = [];
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
+  NotificationServices notificationServices = NotificationServices();
+
   @override
   void initState() {
     super.initState();
@@ -30,6 +33,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     setStatus("Online");
     _initializeCurrentUser();
     _initializeUsers();
+    notificationServices.requestNotificationPermission();
   }
 
   void setStatus(String status) async {
