@@ -20,11 +20,10 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
   final ChatService _chatService = ChatService();
   final AuthService _authService = AuthService();
   late AppUser _currentUser;
-  late List<Map<String, dynamic>> _users;
-  late List<Map<String, dynamic>> _filteredUsers = [];
+  List<Map<String, dynamic>> _users = [];
+  List<Map<String, dynamic>> _filteredUsers = [];
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-
-  NotificationServices notificationServices = NotificationServices();
+  final NotificationServices notificationServices = NotificationServices();
 
   @override
   void initState() {
@@ -47,16 +46,15 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.resumed) {
-      //online
       setStatus("Online");
     } else {
-      //offline
       setStatus("Offline");
     }
   }
 
-  void _initializeCurrentUser() async {
+  Future<void> _initializeCurrentUser() async {
     _currentUser = (await _authService.getCurrentUser()) ?? AppUser(uid: '', email: '', avatarUrl: '');
+    setState(() {});
   }
 
   void _initializeUsers() async {
@@ -77,8 +75,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
       if (query.isEmpty) {
         _filteredUsers = List.from(_users);
       } else {
-        _filteredUsers =
-            _users.where((user) => user["email"].contains(query)).toList();
+        _filteredUsers = _users.where((user) => user["email"].contains(query)).toList();
       }
     });
   }
@@ -160,71 +157,63 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     );
   }
 
-  Widget _buildUserListItem(
-      Map<String, dynamic> userData, BuildContext context) {
-    if (userData["email"] != _currentUser.email) {
+  Widget _buildUserListItem(Map<String, dynamic>? userData, BuildContext context) {
+    if (userData?["email"] != _currentUser.email) {
       return StreamBuilder(
-        stream: _chatService.getMessages(_currentUser.uid, userData["uid"]),
+        stream: _chatService.getMessages(_currentUser.uid, userData?["uid"]),
         builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return CircularProgressIndicator();
+          } else if (snapshot.hasError) {
+            return Text('Error: ${snapshot.error}');
           } else {
-            if (snapshot.hasError) {
-              return Text('Error: ${snapshot.error}');
-            } else {
-              final lastMessage = snapshot.data!.docs.isNotEmpty
-                  ? snapshot.data!.docs.last['message']
-                  : '';
-              final lastSenderEmail = snapshot.data!.docs.isNotEmpty
-                  ? snapshot.data!.docs.last['senderEmail']
-                  : '';
-              final timestamp = snapshot.data!.docs.isNotEmpty
-                  ? snapshot.data!.docs.last['timestamp'] as Timestamp
-                  : null;
-              final time = timestamp != null
-                  ? DateFormat('hh:mm a').format(timestamp.toDate())
-                  : '';
-              final combinedMessage = lastMessage.isNotEmpty
-                  ? 'Last message: $lastMessage'
-                  : '';
-              return Dismissible(
-                key: Key(userData["uid"]),
-                direction: DismissDirection.endToStart,
-                background: Container(
-                  alignment: Alignment.centerRight,
-                  color: Colors.red,
-                  child: const Padding(
-                    padding: EdgeInsets.only(right: 16.0),
-                    child: Icon(
-                      Icons.delete,
-                      color: Colors.white,
-                    ),
+            final List<DocumentSnapshot> docs = snapshot.data?.docs ?? [];
+            final lastMessage = docs.isNotEmpty ? docs.last['message'] ?? '' : '';
+            final lastSenderEmail = docs.isNotEmpty ? docs.last['senderEmail'] ?? '' : '';
+            final timestamp = docs.isNotEmpty ? docs.last['timestamp'] as Timestamp? : null;
+            final time = timestamp != null ? DateFormat('hh:mm a').format(timestamp.toDate()) : '';
+            final unseenCount = docs.where((doc) => doc.data() != null && (doc.data() as Map<String, dynamic>).containsKey('seen') && !(doc.data() as Map<String, dynamic>)['seen'] && (doc.data() as Map<String, dynamic>)['senderID'] != _currentUser.uid).length;
+            final isLastMessageUnseen = docs.isNotEmpty && docs.last.data() != null && (docs.last.data() as Map<String, dynamic>).containsKey('seen') && !(docs.last.data() as Map<String, dynamic>)['seen'] && (docs.last.data() as Map<String, dynamic>)['senderID'] != _currentUser.uid;
+
+            return Dismissible(
+              key: Key(userData!["uid"].toString()),
+              direction: DismissDirection.endToStart,
+              background: Container(
+                alignment: Alignment.centerRight,
+                color: Colors.red,
+                child: const Padding(
+                  padding: EdgeInsets.only(right: 16.0),
+                  child: Icon(
+                    Icons.delete,
+                    color: Colors.white,
                   ),
                 ),
-                onDismissed: (direction) {
-                  setState(() {
-                    _filteredUsers.remove(userData);
-                  });
-                },
-                child: UserTile(
-                  text: userData["email"],
-                  lastMessage: combinedMessage,
-                  sender: lastSenderEmail,
-                  time: time, // Pass the time to the UserTile
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => ChatPage(
-                          receiverEmail: userData["email"],
-                          receiverID: userData["uid"],
-                        ),
+              ),
+              onDismissed: (direction) {
+                setState(() {
+                  _filteredUsers.remove(userData);
+                });
+              },
+              child: UserTile(
+                text: userData?["email"] ?? '',
+                lastMessage: lastMessage,
+                sender: lastSenderEmail,
+                time: time,
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ChatPage(
+                        receiverEmail: userData?["email"] ?? '',
+                        receiverID: userData?["uid"] ?? '',
                       ),
-                    );
-                  },
-                ),
-              );
-            }
+                    ),
+                  );
+                },
+                unseenCount: unseenCount,
+                isLastMessageUnseen: isLastMessageUnseen,
+              ),
+            );
           }
         },
       );

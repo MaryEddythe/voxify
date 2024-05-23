@@ -28,7 +28,7 @@ class ChatService {
       receiverEmail: receiverEmail,
       message: message,
       timestamp: timestamp,
-      seen: false, // Initialize seen to false
+      seen: false, 
     );
 
     List<String> ids = [currentUserID, receiverID];

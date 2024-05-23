@@ -15,7 +15,7 @@ class MyDrawer extends StatefulWidget {
 class _MyDrawerState extends State<MyDrawer> {
   bool _isHovered = false;
   String? _currentUserEmail;
-  String? _userAvatarUrl = 'assets/wala.jpg'; // Default avatar image URL
+  String? _userAvatarUrl = 'assets/icons.png'; 
 
   @override
   void initState() {
@@ -28,7 +28,7 @@ class _MyDrawerState extends State<MyDrawer> {
     final currentUser = await authService.getCurrentUser();
     setState(() {
       _currentUserEmail = currentUser?.email;
-      _userAvatarUrl = currentUser?.avatarUrl ?? _userAvatarUrl; // Update avatar URL if available
+      _userAvatarUrl = currentUser?.avatarUrl ?? _userAvatarUrl; 
     });
   }
 
@@ -45,7 +45,7 @@ class _MyDrawerState extends State<MyDrawer> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Padding(
-            padding: const EdgeInsets.only(top: 40.0), // Adjust top padding here
+            padding: const EdgeInsets.only(top: 40.0), 
             child: Column(
               children: [
                 // Custom Drawer Header
@@ -56,10 +56,9 @@ class _MyDrawerState extends State<MyDrawer> {
                       CircleAvatar(
                         radius: 70,
                         backgroundColor: Theme.of(context).colorScheme.tertiary,
-                        backgroundImage: AssetImage(_userAvatarUrl!), // Use dynamic image URL
+                        backgroundImage: AssetImage(_userAvatarUrl!), 
                       ),
                       SizedBox(height: 10),
-                      // Display current user's email address
                       Text(
                         _currentUserEmail ?? 'Loading...',
                         style: GoogleFonts.poppins(
@@ -68,8 +67,8 @@ class _MyDrawerState extends State<MyDrawer> {
                           ),
                         ),
                       ),
-                      SizedBox(height: 8), // Add some space
-                      Divider(), // Add a divider
+                      SizedBox(height: 8), 
+                      Divider(), 
                     ],
                   ),
                 ),

@@ -7,7 +7,7 @@ class Message {
   final String receiverEmail;
   final String message;
   final Timestamp timestamp;
-  final bool seen; // Add seen field
+  final bool seen; 
 
   Message({
     required this.senderID,
@@ -16,7 +16,7 @@ class Message {
     required this.receiverEmail,
     required this.message,
     required this.timestamp,
-    this.seen = false, // Initialize seen to false
+    this.seen = false, 
   });
 
   // Convert to map
@@ -28,7 +28,7 @@ class Message {
       'receiverEmail': receiverEmail,
       'message': message,
       'timestamp': timestamp,
-      'seen': seen, // Add seen to map
+      'seen': seen, 
     };
   }
 }
