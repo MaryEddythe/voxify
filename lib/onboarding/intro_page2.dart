@@ -18,7 +18,7 @@ class IntroPage2 extends StatelessWidget {
               Text(
                 'Discover what Quippy can do.',
                 style: GoogleFonts.montserrat(
-                  fontSize: 26,
+                  fontSize: 22,
                   fontWeight: FontWeight.bold,
                   color: Colors.black,
                 ),

@@ -18,7 +18,7 @@ class IntroPage3 extends StatelessWidget {
               Text(
                 'Your Quippy journey begins now!',
                 style: GoogleFonts.montserrat(
-                  fontSize: 26,
+                  fontSize: 19,
                   fontWeight: FontWeight.bold,
                   color: Colors.black,
                 ),

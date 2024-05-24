@@ -96,7 +96,7 @@ class _UserTileState extends State<UserTile> {
                         style: GoogleFonts.poppins(
                           textStyle: TextStyle(
                             color: _isHovered ? Colors.white : Colors.grey,
-                            fontSize: 12,
+                            fontSize: 10,
                           ),
                         ),
                       ),

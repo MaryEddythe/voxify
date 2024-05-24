@@ -6,7 +6,7 @@ import 'package:verbalize/services/auth/authservice.dart';
 import 'package:verbalize/page/settings.dart';
 
 class MyDrawer extends StatefulWidget {
-  const MyDrawer({Key? key});
+  const MyDrawer({Key? key}) : super(key: key); // Added super constructor
 
   @override
   State<MyDrawer> createState() => _MyDrawerState();

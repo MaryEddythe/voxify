@@ -88,6 +88,8 @@ flutter:
     - assets/files.gif
     - assets/icon.png
     - assets/icons.png
+    - assets/edith.png
+    - assets/dev3.jpg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

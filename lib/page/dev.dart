@@ -46,7 +46,7 @@ class Developers extends StatelessWidget {
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(10),
                           child: Image.asset(
-                            'edith.png',
+                            'assets/edith.png',
                             fit: BoxFit.cover,
                           ),
                         ),
@@ -91,7 +91,7 @@ class Developers extends StatelessWidget {
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(10),
                           child: Image.asset(
-                            'dev3.jpg',
+                            'assets/dev3.jpg',
                             fit: BoxFit.cover,
                           ),
                         ),
@@ -154,7 +154,7 @@ class Developers extends StatelessWidget {
                 Container(
                   padding: EdgeInsets.all(16),
                   child: Text(
-                    'The developers in their third year of Bachelor of Science in Information Technology (BSIT) at West Visayas State University have dedicated themselves to specializing in Software Technologies. This particular application represents the culmination of their efforts, serving as the final project for their Mobile Application Development course. ',
+                    'The developers, Mary Eddythe Sornito and Kyle Velez in their third year of Bachelor of Science in Information Technology (BSIT) at West Visayas State University have dedicated themselves to specializing in Software Technologies. This particular application represents the culmination of their efforts, serving as the final project for their Mobile Application Development course.',
                     textAlign: TextAlign.center,
                     style: GoogleFonts.poppins(
                       textStyle: TextStyle(

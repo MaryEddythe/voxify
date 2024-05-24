@@ -157,13 +157,15 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     );
   }
 
-  Widget _buildUserListItem(Map<String, dynamic>? userData, BuildContext context) {
+   Widget _buildUserListItem(Map<String, dynamic>? userData, BuildContext context) {
     if (userData?["email"] != _currentUser.email) {
       return StreamBuilder(
         stream: _chatService.getMessages(_currentUser.uid, userData?["uid"]),
         builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return CircularProgressIndicator();
+            return Center(
+              child: CircularProgressIndicator(),
+            );
           } else if (snapshot.hasError) {
             return Text('Error: ${snapshot.error}');
           } else {
@@ -174,7 +176,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
             final time = timestamp != null ? DateFormat('hh:mm a').format(timestamp.toDate()) : '';
             final unseenCount = docs.where((doc) => doc.data() != null && (doc.data() as Map<String, dynamic>).containsKey('seen') && !(doc.data() as Map<String, dynamic>)['seen'] && (doc.data() as Map<String, dynamic>)['senderID'] != _currentUser.uid).length;
             final isLastMessageUnseen = docs.isNotEmpty && docs.last.data() != null && (docs.last.data() as Map<String, dynamic>).containsKey('seen') && !(docs.last.data() as Map<String, dynamic>)['seen'] && (docs.last.data() as Map<String, dynamic>)['senderID'] != _currentUser.uid;
-
+            
             return Dismissible(
               key: Key(userData!["uid"].toString()),
               direction: DismissDirection.endToStart,
