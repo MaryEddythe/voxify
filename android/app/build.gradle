@@ -62,6 +62,13 @@ android {
             signingConfig signingConfigs.debug
         }
     }
+
+    lint {
+        // Set the lint baseline file
+        baseline = file("lint-baseline.xml")
+    }
+
+    // Other Android-specific configurations go here...
 }
 
 flutter {
@@ -69,5 +76,5 @@ flutter {
 }
 
 dependencies {
-     implementation 'com.android.support:multidex:1.0.3'
+    implementation 'com.android.support:multidex:1.0.3'
 }
